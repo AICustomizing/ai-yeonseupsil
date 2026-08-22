@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 에이전트 오케스트레이션 — 시안</title>
+<style>
+  :root{
+    --bg:#F6F8FB; --surface:#FFFFFF; --surface2:#F6F8FB;
+    --ink:#1A1A1A; --ink2:#3E4551; --muted:#8B93A1;
+    --line:#E3E8EF; --border:rgba(16,24,40,.12);
+    --c1:#1B64DA; --c2:#D95926; --c3:#199E70; --c4:#C98500;
+    --good:#0E9F44; --claude:#D97757;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo",sans-serif;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .stage-wrap{transform-origin:center center}
+  .stage{
+    position:relative; width:960px; height:700px;
+    background:var(--surface);
+    background-image:radial-gradient(rgba(16,24,40,.045) 1px,transparent 1px);
+    background-size:22px 22px;
+    border:1px solid var(--border); border-radius:16px;
+    padding:18px 26px 14px; overflow:hidden;
+  }
+
+  /* ── header ── */
+  .hd{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+  .hd-title{display:flex; align-items:center; gap:8px; font-size:14px; font-weight:700; letter-spacing:-.2px}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--good);animation:blink 1.6s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  .replay{
+    font:inherit;font-size:11px;color:var(--ink2);background:var(--surface2);
+    border:1px solid var(--border);border-radius:999px;padding:5px 13px;cursor:pointer;
+    transition:all .25s;
+  }
+  .replay:hover{border-color:rgba(217,119,87,.55);color:var(--ink)}
+  .replay.nudge{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{border-color:rgba(217,119,87,.7);box-shadow:0 0 10px rgba(217,119,87,.25)}}
+
+  /* ── command ── */
+  .cmd-row{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+  .cmd-box{
+    flex:1; display:flex; align-items:center; gap:8px;
+    background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+    padding:10px 14px; font-family:var(--mono); font-size:13px; color:var(--ink);
+    transition:border-color .25s, box-shadow .25s;
+  }
+  .cmd-box.sent{border-color:rgba(217,119,87,.55); box-shadow:0 0 14px rgba(217,119,87,.18)}
+  .prompt-sign{color:var(--claude); font-weight:700}
+  .caret{display:inline-block;width:7px;height:15px;background:var(--ink2);animation:blink 1s infinite;vertical-align:-2px}
+  .caret.off{display:none}
+  .cmd-badge{
+    font-size:11px; color:var(--ink2); background:var(--surface2);
+    border:1px solid var(--border); border-radius:999px; padding:5px 11px;
+    opacity:0; transform:translateX(-4px); transition:all .3s; white-space:nowrap;
+  }
+  .cmd-badge.on{opacity:1; transform:none; border-color:rgba(217,119,87,.5)}
+
+  /* ── claude node ── */
+  .claude-row{display:flex; justify-content:center; margin-bottom:34px}
+  .claude{
+    position:relative; z-index:2;
+    display:flex; align-items:center; gap:11px;
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    padding:10px 20px; min-width:250px;
+    transition:border-color .3s, box-shadow .3s;
+  }
+  .claude.on{border-color:rgba(217,119,87,.6); box-shadow:0 0 22px rgba(217,119,87,.22)}
+  .claude.done{border-color:rgba(12,163,12,.55); box-shadow:0 0 18px rgba(12,163,12,.18)}
+  .claude-ico{
+    width:34px;height:34px;border-radius:9px; flex:none;
+    background:rgba(217,119,87,.14); color:var(--claude);
+    display:flex;align-items:center;justify-content:center; font-size:19px;
+  }
+  .claude.on .claude-ico{animation:spin 3.2s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .claude-name{font-size:13.5px;font-weight:700}
+  .claude-status{font-size:11px;color:var(--muted);margin-top:1px;transition:color .3s}
+  .claude.on .claude-status{color:var(--ink2)}
+  .claude.done .claude-status{color:var(--good)}
+
+  /* ── agents ── */
+  .agents{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:46px}
+  .agent{position:relative; z-index:2; opacity:.45; transition:opacity .35s}
+  .agent.active,.agent.done{opacity:1}
+
+  /* ── 로봇 ── */
+  .bot{display:flex;justify-content:center;margin-bottom:-5px}
+  .botsvg{width:92px;height:92px;overflow:visible}
+  .botsvg .skull{fill:color-mix(in srgb,var(--ac) 40%,var(--surface2));stroke:color-mix(in srgb,var(--ac) 60%,transparent);stroke-width:1.5}
+  .botsvg .face{fill:#121211}
+  .botsvg .eyes rect{fill:#fff;opacity:.2;transition:opacity .3s}
+  .agent.active .eyes rect{opacity:1}
+  .agent.active .eyes{filter:drop-shadow(0 0 4px var(--ac))}
+  .botsvg .happy{stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round;opacity:0;transition:opacity .3s}
+  .agent.done .happy{opacity:1}
+  .agent.done .eyes rect{opacity:0}
+  .botsvg .ant-rod{stroke:color-mix(in srgb,var(--ac) 55%,var(--surface2));stroke-width:3}
+  .botsvg .bulb{fill:#C9CFD8;transition:fill .3s}
+  .agent.active .bulb,.agent.done .bulb{fill:var(--ac)}
+  .agent.active .bulb{animation:blink 1s infinite}
+  .botsvg .torso{fill:color-mix(in srgb,var(--ac) 28%,var(--surface2));stroke:color-mix(in srgb,var(--ac) 55%,transparent);stroke-width:1.5}
+  .botsvg .core{fill:var(--ac);opacity:.25;transition:opacity .3s}
+  .agent.active .core{opacity:1;animation:blink 1.3s infinite}
+  .agent.done .core{opacity:1}
+  .botsvg .limb{fill:color-mix(in srgb,var(--ac) 52%,var(--surface2))}
+  .botsvg .hand{fill:var(--ac)}
+  .botsvg .foot{fill:color-mix(in srgb,var(--ac) 65%,var(--surface2))}
+  .botsvg *{transform-box:view-box}
+
+  /* 머리: 졸다 → 두리번/까딱 → 폴짝 */
+  .headg{transform-origin:48px 40px;transform:rotate(-7deg);transition:transform .4s}
+  .agent.active .headg,.agent.done .headg{transform:rotate(0)}
+  .agent.active .headg{animation:bob 1.5s ease-in-out infinite}
+  #ag0.active .headg{animation:look 2.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+  @keyframes look{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+  .agent.done .headg{animation:hop .5s ease-in-out 2}
+  @keyframes hop{50%{transform:translateY(-5px)}}
+
+  /* 팔 */
+  .armL{transform-origin:31px 62px;transform:rotate(-50deg);transition:transform .45s}
+  .armR{transform-origin:65px 62px;transform:rotate(50deg);transition:transform .45s}
+  /* 수집: 돋보기 스캔 */
+  #ag0.active .armR{animation:sweep 1.9s ease-in-out infinite}
+  @keyframes sweep{0%,100%{transform:rotate(58deg)}50%{transform:rotate(-6deg)}}
+  /* 분석: 두드리기 */
+  #ag1.active .armR{animation:tapR .85s ease-in-out infinite}
+  #ag1.active .armL{animation:tapL .85s ease-in-out infinite .42s}
+  @keyframes tapR{0%,100%{transform:rotate(50deg)}50%{transform:rotate(10deg)}}
+  @keyframes tapL{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(-10deg)}}
+  /* 실행: 타자 */
+  #ag2.active .armL{animation:typeL .34s linear infinite}
+  #ag2.active .armR{animation:typeR .34s linear infinite .17s}
+  @keyframes typeL{0%,100%{transform:rotate(-40deg)}50%{transform:rotate(-58deg)}}
+  @keyframes typeR{0%,100%{transform:rotate(40deg)}50%{transform:rotate(58deg)}}
+  /* 검증: 체크 긋기 */
+  #ag3.active .armR{animation:tick 1.2s ease-in-out infinite}
+  @keyframes tick{0%,60%,100%{transform:rotate(50deg)}25%{transform:rotate(-2deg)}42%{transform:rotate(20deg)}}
+  /* 완료: 만세 */
+  .agent.done .armL{transform:rotate(65deg)}
+  .agent.done .armR{transform:rotate(-65deg)}
+
+  /* 다리 */
+  .legL{transform-origin:41px 82px}
+  .legR{transform-origin:55px 82px}
+  .agent.active .legL{animation:march .58s ease-in-out infinite}
+  .agent.active .legR{animation:march .58s ease-in-out infinite .29s}
+  @keyframes march{50%{transform:rotate(13deg) translateY(-2px)}}
+
+  /* ── 카드 ── */
+  .card{
+    background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+    padding:10px 12px 11px;
+    transition:border-color .35s, box-shadow .35s;
+  }
+  .agent.active .card{border-color:color-mix(in srgb,var(--ac) 45%,transparent); box-shadow:0 0 16px color-mix(in srgb,var(--ac) 14%,transparent)}
+  .agent.done .card{border-color:rgba(12,163,12,.45); box-shadow:none}
+  .agent-top{display:flex; align-items:center; gap:8px; margin-bottom:8px}
+  .agent-ico{
+    width:28px;height:28px;border-radius:8px;flex:none;
+    background:color-mix(in srgb,var(--ac) 16%,transparent);
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+  }
+  .agent-name{font-size:12px;font-weight:700;letter-spacing:-.2px}
+  .agent-role{font-size:9.5px;color:var(--muted);margin-top:1px}
+  .badge{
+    margin-left:auto; display:flex; align-items:center; gap:4px;
+    font-size:9.5px; color:var(--muted); background:var(--surface);
+    border:1px solid var(--border); border-radius:999px; padding:3px 8px; white-space:nowrap;
+  }
+  .badge .bdot{width:5px;height:5px;border-radius:50%;background:var(--muted)}
+  .agent.active .badge{color:var(--ink2)}
+  .agent.active .badge .bdot{background:var(--ac);animation:blink .9s infinite}
+  .agent.done .badge{color:var(--good);border-color:rgba(12,163,12,.4)}
+  .agent.done .badge .bdot{background:var(--good);animation:none}
+  .agent-body{height:80px; overflow:hidden; margin-bottom:8px}
+
+  /* 수집: 로그 */
+  .logs{display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:9.5px;color:var(--ink2)}
+  .logs .ln{display:flex;gap:5px;opacity:0;transform:translateY(5px);transition:all .3s}
+  .logs .ln.in{opacity:1;transform:none}
+  .logs .ln .t{color:var(--muted);flex:none}
+  .logs .ln.ok .t{color:var(--good)}
+
+  /* 분석: 미니 바차트 */
+  .bars{display:flex;align-items:flex-end;gap:5px;height:58px;padding-top:3px}
+  .bar{
+    flex:1;background:var(--c2);border-radius:3px 3px 0 0;
+    height:calc(var(--h)*1%);transform:scaleY(.15);transform-origin:bottom;
+    transition:transform .5s;
+  }
+  .agent.active .bar{animation:wig var(--d) ease-in-out infinite alternate}
+  .agent.done .bar{animation:none;transform:scaleY(1)}
+  @keyframes wig{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+  .bars-cap{font-size:9px;color:var(--muted);margin-top:5px;font-family:var(--mono)}
+
+  /* 실행: 파일 라인 */
+  .doc{display:flex;flex-direction:column;gap:6px;padding-top:4px}
+  .dline{
+    height:7px;border-radius:4px;background:color-mix(in srgb,var(--c3) 55%,var(--surface));
+    width:calc(var(--w)*1%);transform:scaleX(0);transform-origin:left;transition:transform .45s ease;
+  }
+  .dline.head2{height:9px;background:var(--c3)}
+  .dline.in{transform:scaleX(1)}
+
+  /* 검증: 체크리스트 */
+  .checks{display:flex;flex-direction:column;gap:6px;padding-top:2px}
+  .chk{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--muted);transition:color .3s}
+  .chk .mk{
+    width:13px;height:13px;border-radius:50%;border:1.5px solid var(--line);flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:8.5px;color:transparent;
+    transition:all .3s;
+  }
+  .chk.on{color:var(--ink2)}
+  .chk.on .mk{border-color:var(--good);color:var(--good);transform:scale(1.15)}
+
+  /* 진행률 */
+  .pbar{height:4px;border-radius:2px;background:var(--surface);overflow:hidden}
+  .pfill{height:100%;width:0;border-radius:2px;background:var(--ac)}
+  .agent.done .pfill{background:var(--good)}
+
+  /* ── 결과물 ── */
+  .result-row{display:flex;justify-content:center;margin-bottom:14px}
+  .result{
+    position:relative;z-index:2; width:420px;
+    background:var(--surface2);border:1px solid var(--border);border-radius:12px;
+    padding:11px 15px 12px; opacity:.45; transition:opacity .35s,border-color .35s,box-shadow .4s;
+  }
+  .result.on{opacity:1}
+  .result.done{border-color:rgba(12,163,12,.55);box-shadow:0 0 24px rgba(12,163,12,.2)}
+  .res-top{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .res-ico{font-size:15px}
+  .res-name{font-size:12px;font-weight:700}
+  .res-status{margin-left:auto;font-size:9.5px;color:var(--muted);font-family:var(--mono)}
+  .result.done .res-status{color:var(--good);font-weight:700}
+  .res-rows{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .rrow{
+    display:flex;align-items:center;gap:6px;font-size:9.5px;color:var(--muted);
+    background:var(--surface);border-radius:6px;padding:5px 8px;
+    opacity:.4;transition:opacity .3s,color .3s;
+  }
+  .rrow .rbar{width:3px;height:12px;border-radius:2px;background:var(--rc);flex:none}
+  .rrow.in{opacity:1;color:var(--ink2)}
+  .stamp{
+    position:absolute;right:12px;top:-11px;
+    font-size:10px;font-weight:800;color:var(--good);
+    background:var(--surface);border:1.5px solid var(--good);border-radius:999px;
+    padding:3px 10px;transform:scale(0) rotate(-8deg);transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .stamp.on{transform:scale(1) rotate(-8deg)}
+
+  /* ── 단계 표시 ── */
+  .steps{display:flex;align-items:center;justify-content:center;gap:7px}
+  .chip{
+    display:flex;align-items:center;gap:5px;
+    font-size:10px;color:var(--muted);
+    border:1px solid var(--border);border-radius:999px;padding:4px 11px;
+    transition:all .3s;
+  }
+  .chip b{font-weight:800;font-size:9px;width:13px;height:13px;border-radius:50%;
+    background:var(--line);color:var(--ink2);display:flex;align-items:center;justify-content:center}
+  .chip.act{color:var(--ink);border-color:rgba(217,119,87,.55);background:rgba(217,119,87,.1)}
+  .chip.act b{background:var(--claude);color:#fff}
+  .chip.fin{color:var(--ink2)}
+  .chip.fin b{background:var(--good);color:#fff}
+  .sdash{width:14px;height:1px;background:var(--line)}
+
+  /* ── 시작 오버레이 ── */
+  .playov{
+    position:absolute;inset:0;z-index:20;border-radius:16px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    background:rgba(246,248,251,.72);backdrop-filter:blur(3px);
+    transition:opacity .4s;
+  }
+  .playov.off{opacity:0;pointer-events:none}
+  .playbtn{
+    width:76px;height:76px;border-radius:50%;
+    border:2px solid var(--claude);color:var(--claude);
+    background:rgba(217,119,87,.12);
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;padding-left:6px;transition:transform .2s;
+  }
+  .playov:hover .playbtn{transform:scale(1.08)}
+  .playtxt{font-size:13px;color:var(--ink2);letter-spacing:.06em}
+
+  /* ── 배선 ── */
+  #wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+  .wire{fill:none;stroke:var(--line);stroke-width:1.5;transition:stroke .3s}
+  .wire.hot{stroke:#A9B4C4}
+  .dot{filter:drop-shadow(0 0 5px currentColor)}
+</style>
+</head>
+<body>
+<div class="stage-wrap" id="wrap">
+<div class="stage" id="stage">
+  <svg id="wires" viewBox="0 0 960 700"></svg>
+  <div id="content">
+
+    <div class="hd">
+      <div class="hd-title"><span class="live-dot"></span>AI 에이전트 오케스트레이션<span style="font-size:11.5px;font-weight:500;color:var(--muted);margin-left:6px">클로드코드 · 코덱스 · 그록 · 제미나이 CLI</span></div>
+      <button class="replay" id="replayBtn">↻ 다시 재생</button>
+    </div>
+
+    <div class="cmd-row">
+      <div class="cmd-box" id="cmdBox">
+        <span class="prompt-sign">›</span><span id="cmdText"></span><span class="caret" id="caret"></span>
+      </div>
+      <div class="cmd-badge" id="cmdBadge">✓ 명령 전송됨</div>
+    </div>
+
+    <div class="claude-row">
+      <div class="claude" id="claudeNode">
+        <div class="claude-ico">✳</div>
+        <div>
+          <div class="claude-name">클로드 <span style="font-weight:400;color:var(--muted);font-size:10px">오케스트레이터</span></div>
+          <div class="claude-status" id="claudeStatus">대기 중</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agents" id="agentsRow">
+
+      <div class="agent" id="ag0" style="--ac:var(--c1)">
+        <div class="bot"><svg class="botsvg" viewBox="0 0 96 96">
+          <g class="armL"><rect class="limb" x="13" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="15" cy="61.5" r="4.5"/></g>
+          <g class="armR"><rect class="limb" x="63" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="81" cy="61.5" r="4.5"/><text x="74" y="70" font-size="13">🔍</text></g>
+          <g class="headg">
+            <line class="ant-rod" x1="48" y1="15" x2="48" y2="24"/><circle class="bulb" cx="48" cy="11" r="4.5"/>
+            <rect class="skull" x="26" y="23" width="44" height="33" rx="10"/>
+            <rect class="face" x="31" y="28" width="34" height="23" rx="6"/>
+            <g class="eyes"><rect x="38" y="34" width="6" height="9" rx="2.5"/><rect x="52" y="34" width="6" height="9" rx="2.5"/></g>
+            <g class="happy"><path d="M37 40 q4 -5 8 0"/><path d="M51 40 q4 -5 8 0"/><path d="M42 45.5 q6 5 12 0"/></g>
+          </g>
+          <g class="torso"><rect class="torso" x="31" y="57" width="34" height="23" rx="7"/><circle class="core" cx="48" cy="68.5" r="3.5"/></g>
+          <g class="legL"><rect class="limb" x="37" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="41" cy="91" rx="6.5" ry="3"/></g>
+          <g class="legR"><rect class="limb" x="51" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="55" cy="91" rx="6.5" ry="3"/></g>
+        </svg></div>
+        <div class="card">
+          <div class="agent-top">
+            <div class="agent-ico">🔍</div>
+            <div><div class="agent-name">수집 에이전트</div><div class="agent-role">폴더·파일 수집</div></div>
+            <div class="badge"><span class="bdot"></span><span class="btxt">대기</span></div>
+          </div>
+          <div class="agent-body"><div class="logs" id="logs0"></div></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </div>
+      </div>
+
+      <div class="agent" id="ag1" style="--ac:var(--c2)">
+        <div class="bot"><svg class="botsvg" viewBox="0 0 96 96">
+          <g class="armL"><rect class="limb" x="13" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="15" cy="61.5" r="4.5"/></g>
+          <g class="armR"><rect class="limb" x="63" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="81" cy="61.5" r="4.5"/></g>
+          <g class="headg">
+            <line class="ant-rod" x1="48" y1="15" x2="48" y2="24"/><circle class="bulb" cx="48" cy="11" r="4.5"/>
+            <rect class="skull" x="26" y="23" width="44" height="33" rx="10"/>
+            <rect class="face" x="31" y="28" width="34" height="23" rx="6"/>
+            <g class="eyes"><rect x="38" y="34" width="6" height="9" rx="2.5"/><rect x="52" y="34" width="6" height="9" rx="2.5"/></g>
+            <g class="happy"><path d="M37 40 q4 -5 8 0"/><path d="M51 40 q4 -5 8 0"/><path d="M42 45.5 q6 5 12 0"/></g>
+          </g>
+          <g class="torso"><rect class="torso" x="31" y="57" width="34" height="23" rx="7"/><circle class="core" cx="48" cy="68.5" r="3.5"/></g>
+          <g class="legL"><rect class="limb" x="37" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="41" cy="91" rx="6.5" ry="3"/></g>
+          <g class="legR"><rect class="limb" x="51" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="55" cy="91" rx="6.5" ry="3"/></g>
+        </svg></div>
+        <div class="card">
+          <div class="agent-top">
+            <div class="agent-ico">📊</div>
+            <div><div class="agent-name">분석 에이전트</div><div class="agent-role">품목 분류·집계</div></div>
+            <div class="badge"><span class="bdot"></span><span class="btxt">대기</span></div>
+          </div>
+          <div class="agent-body">
+            <div class="bars">
+              <div class="bar" style="--h:55;--d:.9s"></div><div class="bar" style="--h:80;--d:1.2s"></div>
+              <div class="bar" style="--h:42;--d:.8s"></div><div class="bar" style="--h:95;--d:1.05s"></div>
+              <div class="bar" style="--h:65;--d:1.3s"></div><div class="bar" style="--h:88;--d:.95s"></div>
+              <div class="bar" style="--h:72;--d:1.15s"></div>
+            </div>
+            <div class="bars-cap" id="anaCap">대기 중</div>
+          </div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </div>
+      </div>
+
+      <div class="agent" id="ag2" style="--ac:var(--c3)">
+        <div class="bot"><svg class="botsvg" viewBox="0 0 96 96">
+          <g class="armL"><rect class="limb" x="13" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="15" cy="61.5" r="4.5"/></g>
+          <g class="armR"><rect class="limb" x="63" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="81" cy="61.5" r="4.5"/></g>
+          <g class="headg">
+            <line class="ant-rod" x1="48" y1="15" x2="48" y2="24"/><circle class="bulb" cx="48" cy="11" r="4.5"/>
+            <rect class="skull" x="26" y="23" width="44" height="33" rx="10"/>
+            <rect class="face" x="31" y="28" width="34" height="23" rx="6"/>
+            <g class="eyes"><rect x="38" y="34" width="6" height="9" rx="2.5"/><rect x="52" y="34" width="6" height="9" rx="2.5"/></g>
+            <g class="happy"><path d="M37 40 q4 -5 8 0"/><path d="M51 40 q4 -5 8 0"/><path d="M42 45.5 q6 5 12 0"/></g>
+          </g>
+          <g class="torso"><rect class="torso" x="31" y="57" width="34" height="23" rx="7"/><circle class="core" cx="48" cy="68.5" r="3.5"/></g>
+          <g class="legL"><rect class="limb" x="37" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="41" cy="91" rx="6.5" ry="3"/></g>
+          <g class="legR"><rect class="limb" x="51" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="55" cy="91" rx="6.5" ry="3"/></g>
+        </svg></div>
+        <div class="card">
+          <div class="agent-top">
+            <div class="agent-ico">⚙️</div>
+            <div><div class="agent-name">실행 에이전트</div><div class="agent-role">정리 파일 생성</div></div>
+            <div class="badge"><span class="bdot"></span><span class="btxt">대기</span></div>
+          </div>
+          <div class="agent-body">
+            <div class="doc">
+              <div class="dline head2" style="--w:58"></div>
+              <div class="dline" style="--w:96"></div>
+              <div class="dline" style="--w:100"></div>
+              <div class="dline" style="--w:82"></div>
+              <div class="dline" style="--w:64"></div>
+            </div>
+          </div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </div>
+      </div>
+
+      <div class="agent" id="ag3" style="--ac:var(--c4)">
+        <div class="bot"><svg class="botsvg" viewBox="0 0 96 96">
+          <g class="armL"><rect class="limb" x="13" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="15" cy="61.5" r="4.5"/></g>
+          <g class="armR"><rect class="limb" x="63" y="58" width="20" height="7" rx="3.5"/><circle class="hand" cx="81" cy="61.5" r="4.5"/><text x="74" y="70" font-size="12">✏️</text></g>
+          <g class="headg">
+            <line class="ant-rod" x1="48" y1="15" x2="48" y2="24"/><circle class="bulb" cx="48" cy="11" r="4.5"/>
+            <rect class="skull" x="26" y="23" width="44" height="33" rx="10"/>
+            <rect class="face" x="31" y="28" width="34" height="23" rx="6"/>
+            <g class="eyes"><rect x="38" y="34" width="6" height="9" rx="2.5"/><rect x="52" y="34" width="6" height="9" rx="2.5"/></g>
+            <g class="happy"><path d="M37 40 q4 -5 8 0"/><path d="M51 40 q4 -5 8 0"/><path d="M42 45.5 q6 5 12 0"/></g>
+          </g>
+          <g class="torso"><rect class="torso" x="31" y="57" width="34" height="23" rx="7"/><circle class="core" cx="48" cy="68.5" r="3.5"/></g>
+          <g class="legL"><rect class="limb" x="37" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="41" cy="91" rx="6.5" ry="3"/></g>
+          <g class="legR"><rect class="limb" x="51" y="79" width="8" height="11" rx="3"/><ellipse class="foot" cx="55" cy="91" rx="6.5" ry="3"/></g>
+        </svg></div>
+        <div class="card">
+          <div class="agent-top">
+            <div class="agent-ico">🛡️</div>
+            <div><div class="agent-name">검증 에이전트</div><div class="agent-role">합계 대조·검수</div></div>
+            <div class="badge"><span class="bdot"></span><span class="btxt">대기</span></div>
+          </div>
+          <div class="agent-body">
+            <div class="checks">
+              <div class="chk"><span class="mk">✓</span>원본 합계와 대조</div>
+              <div class="chk"><span class="mk">✓</span>중복 행 검사</div>
+              <div class="chk"><span class="mk">✓</span>빈 셀·오탈자 확인</div>
+              <div class="chk"><span class="mk">✓</span>시트 서식 검토</div>
+            </div>
+          </div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="result-row">
+      <div class="result" id="resultNode">
+        <div class="stamp" id="stamp">✓ 완성</div>
+        <div class="res-top">
+          <span class="res-ico">📊</span>
+          <span class="res-name" id="resName">송장파일.xlsx 외 2개</span>
+          <span class="res-status" id="resStatus">생성 대기</span>
+        </div>
+        <div class="res-rows">
+          <div class="rrow" style="--rc:var(--c1)"><span class="rbar"></span>엑셀 23개 · 1,842행 읽음</div>
+          <div class="rrow" style="--rc:var(--c2)"><span class="rbar"></span>품목 18종 집계</div>
+          <div class="rrow" style="--rc:var(--c3)"><span class="rbar"></span>요약 시트 생성</div>
+          <div class="rrow" style="--rc:var(--c4)"><span class="rbar"></span>합계 검증 통과</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps" id="steps">
+      <div class="chip"><b>1</b>명령</div><div class="sdash"></div>
+      <div class="chip"><b>2</b>분배</div><div class="sdash"></div>
+      <div class="chip"><b>3</b>병렬 작업</div><div class="sdash"></div>
+      <div class="chip"><b>4</b>결과 수렴</div>
+    </div>
+
+  </div>
+
+  <div class="playov" id="playov"><div class="playbtn">▶</div><div class="playtxt">클릭하면 시작</div></div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const stage=$('stage'), wrap=$('wrap'), svg=$('wires'), NS='http://www.w3.org/2000/svg';
+const AG_COLORS=['#1B64DA','#d95926','#199e70','#c98500'];
+const CMD='다운로드 폴더 엑셀 전부 확인해서 품목별 개수 정리해줘';
+let timers=[], arrived=0;
+
+/* 결과 파일명에 오늘 날짜 */
+{
+  const d=new Date();
+  const ymd=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  $('resName').textContent=`품목별_정리_${ymd}.xlsx`;
+}
+
+/* ── 화면 맞춤 ── */
+function fit(){
+  const k=Math.min((innerWidth-24)/960,(innerHeight-24)/700);
+  wrap.style.transform=`scale(${k})`;
+}
+addEventListener('resize',()=>{fit();buildWires()});
+
+/* ── 배선 ── */
+let downPaths=[], upPaths=[];
+function pos(el,edge){
+  const r=el.getBoundingClientRect(), s=stage.getBoundingClientRect(), k=s.width/960;
+  return {x:(r.left-s.left+r.width/2)/k, y:((edge==='top'?r.top:r.bottom)-s.top)/k};
+}
+function mkPath(a,b,endPad){
+  const p=document.createElementNS(NS,'path');
+  p.setAttribute('d',`M ${a.x} ${a.y+3} C ${a.x} ${a.y+32}, ${b.x} ${b.y-32}, ${b.x} ${b.y-(endPad??3)}`);
+  p.setAttribute('class','wire'); svg.appendChild(p); return p;
+}
+function buildWires(){
+  svg.querySelectorAll('.wire').forEach(w=>w.remove());
+  const cl=$('claudeNode'), rs=$('resultNode');
+  downPaths=[];upPaths=[];
+  for(let i=0;i<4;i++){
+    const a=$('ag'+i);
+    downPaths.push(mkPath(pos(cl,'bottom'),pos(a,'top'),-8));  /* 안테나 전구까지 */
+    upPaths.push(mkPath(pos(a,'bottom'),pos(rs,'top')));
+  }
+}
+function sendDot(path,dur,color,cb){
+  const d=document.createElementNS(NS,'circle');
+  d.setAttribute('r',4.5); d.setAttribute('fill',color);
+  d.setAttribute('class','dot'); d.style.color=color; svg.appendChild(d);
+  path.classList.add('hot');
+  const len=path.getTotalLength(), t0=performance.now();
+  (function fr(now){
+    if(!d.isConnected)return;
+    const t=Math.min(1,(now-t0)/dur);
+    const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+    const p=path.getPointAtLength(len*e);
+    d.setAttribute('cx',p.x); d.setAttribute('cy',p.y);
+    if(t<1)requestAnimationFrame(fr);
+    else{d.remove();path.classList.remove('hot');cb&&cb()}
+  })(t0);
+}
+
+/* ── 헬퍼 ── */
+function at(ms,fn){timers.push(setTimeout(fn,ms))}
+function badge(i,txt){$('ag'+i).querySelector('.btxt').textContent=txt}
+function step(n,st){
+  $('steps').querySelectorAll('.chip').forEach((c,i)=>{
+    if(i<n-1)c.className='chip fin';
+    else if(i===n-1)c.className='chip '+st;
+    else c.className='chip';
+  });
+}
+function addLog(txt,ok){
+  const box=$('logs0');
+  const ln=document.createElement('div');
+  ln.className='ln'+(ok?' ok':'');
+  ln.innerHTML=`<span class="t">${ok?'✓':'»'}</span><span>${txt}</span>`;
+  box.appendChild(ln);
+  while(box.children.length>5)box.removeChild(box.firstChild);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>ln.classList.add('in')));
+}
+function progress(i,dur){
+  const f=$('ag'+i).querySelector('.pfill');
+  f.style.transition=`width ${dur}ms linear`;
+  requestAnimationFrame(()=>f.style.width='100%');
+}
+function agentDone(i,arriveMs){
+  const a=$('ag'+i);
+  a.classList.remove('active'); a.classList.add('done');
+  badge(i,'완료');
+  sendDot(upPaths[i],arriveMs,AG_COLORS[i],()=>{
+    const row=$('resultNode').querySelectorAll('.rrow')[i];
+    row.classList.add('in');
+    arrived++;
+    $('resStatus').textContent=`조립 중 ${arrived}/4`;
+    if(arrived===1){$('resultNode').classList.add('on');step(4,'act');$('claudeStatus').textContent='결과 취합 중...'}
+    if(arrived===4){
+      $('resultNode').classList.add('done');
+      $('resStatus').textContent='바탕화면에 저장됨';
+      $('stamp').classList.add('on');
+      $('claudeNode').classList.remove('on');$('claudeNode').classList.add('done');
+      $('claudeStatus').textContent='작업 완료 ✓';
+      step(5,'act');
+    }
+  });
+}
+
+/* ── 리셋 ── */
+function reset(){
+  arrived=0;
+  $('cmdText').textContent=''; $('caret').classList.remove('off');
+  $('cmdBox').classList.remove('sent'); $('cmdBadge').classList.remove('on');
+  const cl=$('claudeNode'); cl.className='claude'; $('claudeStatus').textContent='대기 중';
+  for(let i=0;i<4;i++){
+    const a=$('ag'+i); a.className='agent'; badge(i,'대기');
+    const f=a.querySelector('.pfill'); f.style.transition='none'; f.style.width='0';
+  }
+  $('logs0').innerHTML='';
+  $('anaCap').textContent='대기 중';
+  document.querySelectorAll('.dline').forEach(d=>d.classList.remove('in'));
+  document.querySelectorAll('.chk').forEach(c=>c.classList.remove('on'));
+  const rs=$('resultNode'); rs.className='result';
+  rs.querySelectorAll('.rrow').forEach(r=>r.classList.remove('in'));
+  $('stamp').classList.remove('on'); $('resStatus').textContent='생성 대기';
+  step(1,'act');
+  svg.querySelectorAll('.dot').forEach(d=>d.remove());
+  svg.querySelectorAll('.wire').forEach(w=>w.classList.remove('hot'));
+}
+
+/* ── 1회 재생 ── */
+function run(){
+  timers.forEach(clearTimeout); timers=[];
+  $('replayBtn').classList.remove('nudge');
+  reset();
+
+  /* 1. 명령 타이핑 */
+  CMD.split('').forEach((ch,i)=>at(300+i*88,()=>{$('cmdText').textContent+=ch}));
+  const typed=300+CMD.length*88;
+
+  /* 명령 전송 → 클로드 기동 */
+  at(typed+250,()=>{
+    $('caret').classList.add('off');
+    $('cmdBox').classList.add('sent'); $('cmdBadge').classList.add('on');
+    $('claudeNode').classList.add('on'); $('claudeStatus').textContent='명령 수신';
+    step(2,'act');
+  });
+  at(typed+750,()=>{$('claudeStatus').textContent='작업 분해 중...'});
+
+  /* 2. 분배 펄스 */
+  const disp=typed+1300;
+  for(let i=0;i<4;i++){
+    at(disp+i*220,()=>sendDot(downPaths[i],850,'#D97757',()=>{
+      const a=$('ag'+i); a.classList.add('active'); badge(i,'작업 중');
+    }));
+  }
+  at(disp+1500,()=>{$('claudeStatus').textContent='진행 모니터링 중...';step(3,'act')});
+
+  /* 3. 병렬 작업 */
+  const w0=disp+900, WORK=[[w0,4100],[w0+220,4900],[w0+440,5500],[w0+660,6100]];
+  WORK.forEach(([s,d],i)=>{at(s,()=>progress(i,d))});
+
+  /* 수집: 로그 */
+  const L=[["다운로드 폴더 스캔 중...",0],["엑셀 파일 23개 발견",0],["주문내역_5월.xlsx 읽는 중",0],["행 1,842개 추출",0],["수집 완료 · 파일 23개",1]];
+  L.forEach(([txt,ok],j)=>at(WORK[0][0]+350+j*820,()=>addLog(txt,ok)));
+
+  /* 분석: 캡션 */
+  at(WORK[1][0]+300,()=>{$('anaCap').textContent='품목별 개수 집계 중...'});
+  at(WORK[1][0]+2800,()=>{$('anaCap').textContent='품목 18종 · 1,842건 분류'});
+  at(WORK[1][0]+WORK[1][1],()=>{$('anaCap').textContent='집계 완료 · 품목 18종'});
+
+  /* 실행: 파일 라인 */
+  document.querySelectorAll('.dline').forEach((d,j)=>at(WORK[2][0]+400+j*920,()=>d.classList.add('in')));
+
+  /* 검증: 체크 */
+  document.querySelectorAll('.chk').forEach((c,j)=>at(WORK[3][0]+1300+j*1150,()=>c.classList.add('on')));
+
+  /* 완료 → 결과 수렴 */
+  WORK.forEach(([s,d],i)=>at(s+d,()=>agentDone(i,750)));
+
+  /* 끝 — 반복 없음 */
+  const end=WORK[3][0]+WORK[3][1]+750;
+  at(end+1800,()=>$('replayBtn').classList.add('nudge'));
+}
+
+$('replayBtn').addEventListener('click',run);
+$('playov').addEventListener('click',()=>{$('playov').classList.add('off');run()});
+
+/* 덱(iframe) 안에서 방향키·스페이스를 부모로 전달 */
+if(parent!==window){
+  document.body.style.background='transparent';
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowLeft','ArrowUp','ArrowDown','PageUp','PageDown',' '].includes(e.key)){
+      e.preventDefault(); parent.postMessage({deckKey:e.key},'*');
+    }
+  });
+}
+
+fit(); buildWires(); reset();
+</script>
+</body>
+</html>

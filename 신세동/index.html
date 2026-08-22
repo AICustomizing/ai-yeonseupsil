@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>그레인뱅크 AI-LLM강의 — 무료 오프라인</title>
+<meta name="description" content="4시간 뒤, 내 컴퓨터에 AI 비서가 일하고 있습니다. 코딩 몰라도 됩니다. 노트북만 들고 오세요.">
+<!-- OG: 배포 시 og:image를 절대 URL(1200×630 전용 이미지)로 교체 + 카카오 캐시 초기화 -->
+<meta property="og:title" content="그레인뱅크 AI-LLM강의 — 무료 오프라인">
+<meta property="og:description" content="4시간 뒤, 내 컴퓨터에 AI 비서가 일하고 있습니다. 코딩 몰라도 됩니다.">
+<meta property="og:image" content="assets/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231B64DA'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='17' font-weight='bold' fill='%23fff' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ========== 1. 토큰 ========== */
+:root{
+  --blue:#1B64DA; --blue-deep:#1553BC; --blue-soft:#D9E7FC; --blue-tint:#EFF5FE;
+  --orange:#E8590C;
+  --text:#1A1A1A; --muted:#5C6470; --faint:#6E7787; --border:#E6EAF0;
+  --bg:#FFFFFF; --band:#F6F8FB;
+  --r:14px; --r-lg:20px;
+  --sh-sm:0 1px 2px rgba(16,24,40,.05);
+  --sh-md:0 1px 2px rgba(16,24,40,.05),0 8px 24px rgba(16,24,40,.07);
+  --sh-lg:0 2px 4px rgba(16,24,40,.06),0 18px 48px rgba(16,24,40,.12);
+}
+/* ========== 2. 리셋 + 베이스 ========== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  font-size:17px;line-height:1.65;font-feature-settings:'tnum';
+  padding-bottom:88px; /* 모바일 하단 바 자리 */
+}
+img,svg{display:block;max-width:100%}
+a{color:var(--blue)}
+h1,h2,h3{letter-spacing:-.02em;line-height:1.3;word-break:keep-all}
+p{word-break:keep-all}
+
+/* ========== 3. 레이아웃 ========== */
+.container{max-width:1040px;margin:0 auto;padding:0 22px}
+.narrow{max-width:680px;margin:0 auto;padding:0 22px}
+section{padding:56px 0}
+.band{background:var(--band)}
+h2{font-size:clamp(24px,3vw,32px);font-weight:700;margin-bottom:20px}
+.caption{font-size:14px;color:var(--muted)}
+.ph{border-bottom:1.5px dashed currentColor;opacity:.85} /* 회의 후 값 교체 표시 */
+
+/* ========== 4. 컴포넌트 ========== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:56px;padding:0 34px;border-radius:12px;
+  background:linear-gradient(180deg,#2B74EA,var(--blue));color:#fff;
+  font-size:18px;font-weight:700;letter-spacing:-.01em;text-decoration:none;
+  box-shadow:var(--sh-md);transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;
+}
+.btn:hover{filter:brightness(1.05);transform:translateY(-1px);box-shadow:var(--sh-lg)}
+.btn:active{transform:translateY(0)}
+.badge{
+  display:inline-block;background:var(--orange);color:#fff;
+  font-size:14px;font-weight:700;padding:7px 14px;border-radius:999px;letter-spacing:-.01em;
+}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-sm)}
+.mark{background:linear-gradient(transparent 64%,var(--blue-soft) 64%)}
+
+/* ========== 상단 고정 헤더 (데스크톱, 히어로 지나면 등장) ========== */
+.topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:30;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  transform:translateY(-100%);visibility:hidden;transition:transform .3s ease;
+}
+.topbar.show{transform:none;visibility:visible}
+.topbar-in{max-width:1040px;margin:0 auto;padding:0 22px;height:64px;display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;color:var(--text);text-decoration:none}
+.brand i{width:26px;height:26px;border-radius:7px;background:var(--blue);color:#fff;font-style:normal;
+  font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.topbar-info{margin-left:auto;font-size:15px;color:var(--muted)}
+.topbar .btn{height:44px;padding:0 22px;font-size:15px}
+
+/* ========== ① 히어로 ========== */
+.hero{
+  min-height:100dvh;display:flex;align-items:center;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#FFFFFF 0%,#F1F6FE 100%);
+  padding:72px 0 56px;
+}
+.hero::before{ /* 우측 은은한 블루 글로우 */
+  content:"";position:absolute;right:-180px;top:8%;width:640px;height:640px;border-radius:50%;
+  background:radial-gradient(circle,rgba(27,100,218,.10),transparent 65%);pointer-events:none;
+}
+.hero-grid{position:relative;display:grid;gap:48px;align-items:center;width:100%}
+h1{font-size:clamp(31px,4.6vw,46px);font-weight:800;margin:20px 0 12px}
+.sub{font-size:clamp(19px,2vw,22px);font-weight:600;color:var(--text)}
+.info{margin:20px 0 4px;font-size:15px;line-height:1.9;color:var(--muted)}
+.info .date{color:var(--text);font-weight:600}
+.info .free{color:var(--orange);font-weight:800}
+.ease{font-size:clamp(22px,2.6vw,30px);font-weight:800;line-height:1.45;margin:24px 0 30px}
+.hero-cta{display:flex;flex-direction:column;gap:10px}
+.hero-cta .btn{width:100%}
+.hero-cta .caption{color:var(--faint)}
+
+/* 히어로 목업 창 (채팅형) */
+.win{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--sh-lg);overflow:hidden}
+.win-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:#FAFBFC}
+.win-dots{display:flex;gap:6px}
+.win-dots i{width:11px;height:11px;border-radius:50%}
+.win-dots i:nth-child(1){background:#F6B0A6}.win-dots i:nth-child(2){background:#F5D89A}.win-dots i:nth-child(3){background:#A8DCB5}
+.win-title{font-size:13px;color:var(--muted);font-weight:500}
+.win-body{padding:20px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:11px 15px;border-radius:14px;font-size:15px;line-height:1.55}
+.msg.me{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:#F2F5F9;border-bottom-left-radius:4px}
+.msg.ai b{display:block;margin-bottom:6px}
+.msg.ai ul{list-style:none}
+.msg.ai li{padding-left:22px;position:relative;margin-top:3px;color:var(--muted)}
+.msg.ai li::before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:800}
+.msg.ai li b{display:inline;color:var(--text)}
+.win-note{font-size:14px;color:var(--faint);text-align:right;margin-top:10px}
+.file-chip{display:flex;align-items:center;gap:7px;margin-top:10px;background:#fff;border:1px solid var(--border);
+  border-radius:10px;padding:9px 13px;font-size:14px;font-weight:600;box-shadow:var(--sh-sm);width:fit-content}
+
+/* ========== ② 타겟 자기인식 ========== */
+.stats{display:flex;gap:14px;margin:22px 0 18px}
+.stat{flex:1;background:#fff;border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh-sm);
+  padding:20px 16px;text-align:center}
+.stat b{display:block;font-size:clamp(28px,3vw,36px);font-weight:800;color:var(--blue);letter-spacing:-.02em;line-height:1.2}
+.stat span{font-size:14px;color:var(--muted)}
+
+/* ========== ③ 결과물 3개 ========== */
+.outcomes{display:grid;gap:18px;margin-top:26px}
+.outcome{padding:22px;display:flex;flex-direction:column;gap:14px}
+.outcome h3{font-size:18px;font-weight:700}
+.outcome h3 em{font-style:normal;color:var(--blue);margin-right:7px;font-weight:800}
+.outcome .caption{margin-top:auto}
+.mini{border:1px solid var(--border);border-radius:12px;background:#FAFBFD;padding:16px;min-height:132px}
+/* 카드1: 문서 목업 */
+.doc-bar{font-size:12px;font-weight:600;color:var(--muted);background:#EDF1F6;border-radius:6px;
+  padding:5px 10px;display:inline-block;margin-bottom:12px}
+.doc-line{height:9px;border-radius:5px;background:#E3E9F1;margin-top:8px}
+.doc-line.hl{background:var(--blue-soft)}
+.w95{width:95%}.w80{width:80%}.w70{width:70%}.w55{width:55%}
+/* 카드2: 폴더 목업 */
+.frow{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;padding:8px 2px}
+.frow+.frow{border-top:1px solid var(--border)}
+.frow span{margin-left:auto;font-weight:400;color:var(--muted);font-size:13px}
+.frow i{font-style:normal;color:var(--blue);font-weight:800}
+/* 카드3: 카톡 목업 */
+.kbubble{background:#FEE500;color:#1A1A1A;font-size:14px;line-height:1.5;border-radius:12px;
+  border-bottom-left-radius:4px;padding:11px 14px;max-width:90%}
+.ktime{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:600;
+  color:var(--blue);background:var(--blue-tint);border-radius:999px;padding:6px 12px}
+.shot-note{margin-top:14px;text-align:center;color:var(--faint);font-size:14px}
+
+/* ========== ④ 시간표 ========== */
+ol.steps{list-style:none;counter-reset:s;margin-top:8px}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 24px 52px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;
+  width:34px;height:34px;border-radius:50%;color:#fff;font-size:15px;font-weight:700;
+  background:linear-gradient(180deg,#2B74EA,var(--blue));box-shadow:var(--sh-sm);
+  display:flex;align-items:center;justify-content:center}
+ol.steps li:not(:last-child)::after{content:"";position:absolute;left:16px;top:40px;bottom:0;width:2px;background:#DCE4EF}
+ol.steps b{font-weight:700;font-size:17px}
+ol.steps .caption{display:block;margin-top:2px}
+.total-chip{display:inline-block;margin-bottom:18px;font-size:14px;font-weight:700;color:var(--blue);
+  background:var(--blue-tint);border-radius:999px;padding:6px 14px}
+
+/* ④+ 강의 자료 미리보기 (실물 임베드, 1440×900 렌더 후 축소) */
+.deck-wrap{position:relative;width:100%;max-width:880px;margin:28px auto 0;aspect-ratio:8/5;
+  border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--border);box-shadow:var(--sh-md)}
+.deck-wrap iframe{position:absolute;top:0;left:0;width:1440px;height:900px;border:0;transform-origin:0 0}
+.deck-note{margin-top:14px;text-align:center;font-size:14px;color:var(--faint)}
+
+/* ========== ⑤ 강사 ========== */
+.inst{display:flex;gap:20px;align-items:flex-start}
+.face{width:120px;height:150px;flex-shrink:0;border-radius:var(--r);overflow:hidden;
+  background:linear-gradient(180deg,#EDF1F6,#DFE6EF);display:flex;align-items:flex-end;justify-content:center}
+.face svg{width:74%;opacity:.55}
+.inst-name{font-weight:700;font-size:19px}
+.inst-hist{margin-top:6px;color:var(--muted);font-size:15px}
+
+/* ========== ⑦ 정직 블록 ========== */
+.honest{list-style:none;padding:26px 24px;display:flex;flex-direction:column;gap:14px}
+.honest li{padding-left:30px;position:relative;font-weight:500}
+.honest li::before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;
+  background:var(--blue-tint);color:var(--blue);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;margin-top:3px}
+
+/* ========== ⑧ FAQ ========== */
+details{border-bottom:1px solid var(--border)}
+details:first-of-type{border-top:1px solid var(--border)}
+summary{padding:17px 30px 17px 0;font-size:16px;font-weight:600;cursor:pointer;list-style:none;position:relative}
+summary::after{content:"+";position:absolute;right:4px;top:14px;font-size:21px;font-weight:400;color:var(--faint);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+summary::-webkit-details-marker{display:none}
+details p{font-size:16px;color:var(--muted);padding:0 0 18px}
+
+/* ========== ⑩ 팀 트랙 + 푸터 ========== */
+.team{padding:24px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.team b{font-size:17px}
+.team .caption{margin-top:2px}
+.btn-line{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 22px;
+  border:1.5px solid var(--blue);border-radius:11px;color:var(--blue);font-size:15px;font-weight:700;
+  text-decoration:none;white-space:nowrap;transition:background .15s}
+.btn-line:hover{background:var(--blue-tint)}
+footer{border-top:1px solid var(--border);padding:30px 0 46px;font-size:14px;color:var(--muted)}
+
+/* ========== ⑨ 하단 고정 신청 바 (모바일) ========== */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);
+  border-top:1px solid var(--border);backdrop-filter:blur(8px);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.dock-in{display:flex;align-items:center;gap:12px;max-width:640px;margin:0 auto}
+.dock-info{font-size:13.5px;line-height:1.4;min-width:0}
+.dock-info b{display:block;font-size:14.5px}
+.dock .btn{flex:1;height:48px;padding:0;font-size:16px;box-shadow:none}
+
+/* ========== 6. 모션 ========== */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease var(--d,0s),transform .6s ease var(--d,0s)}
+.reveal.on{opacity:1;transform:none}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hero-copy>*{animation:rise .7s ease backwards}
+.hero-copy>*:nth-child(1){animation-delay:.05s}.hero-copy>*:nth-child(2){animation-delay:.12s}
+.hero-copy>*:nth-child(3){animation-delay:.19s}.hero-copy>*:nth-child(4){animation-delay:.26s}
+.hero-copy>*:nth-child(5){animation-delay:.33s}.hero-copy>*:nth-child(6){animation-delay:.4s}
+.hero-visual{animation:rise .8s ease .3s backwards}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .hero-copy>*,.hero-visual{animation:none}
+  html{scroll-behavior:auto}
+}
+
+/* ========== 7. 데스크톱 재배치 ========== */
+@media (min-width:768px){
+  body{padding-bottom:0;font-size:18px}
+  .container,.narrow{padding:0 32px}
+  section{padding:clamp(64px,9vw,100px) 0}
+  .topbar{display:block}
+  .dock{display:none}
+  .hero{padding:56px 0}
+  .hero-grid{grid-template-columns:1.1fr .9fr}
+  .hero-cta{flex-direction:row;align-items:center;gap:18px}
+  .hero-cta .btn{width:auto}
+  .stats{max-width:520px}
+  .outcomes{grid-template-columns:repeat(3,1fr);gap:22px}
+  .outcomes-head{text-align:center}
+  ol.steps li{padding-bottom:28px}
+  .face{width:140px;height:176px}
+}
+@media (max-width:767px){
+  .hero-visual{display:none} /* 모바일: 히어로는 무스크롤 완결 우선, 목업은 결과물 섹션이 대신함 */
+}
+</style>
+</head>
+<body>
+
+<!-- 상단 고정 헤더 (데스크톱 전용, 히어로 지나면 등장) -->
+<div class="topbar" id="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#top"><i>G</i>그레인뱅크</a>
+    <span class="topbar-info"><span class="ph">9. X. (토) 14:00</span> · 선착순 <span class="ph">15</span>명 · 무료</span>
+    <a class="btn" href="#">단톡방 입장하기 →</a>
+  </div>
+</div>
+
+<!-- ① 히어로 -->
+<header class="hero" id="top">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div><span class="badge">무료 · 선착순 <span class="ph">15</span>명 · 오프라인</span></div>
+      <h1>그레인뱅크<br>AI-LLM강의</h1>
+      <p class="sub">4시간 뒤, 내 컴퓨터에 AI 비서가 일하고 있습니다</p>
+      <p class="info">
+        <span class="date ph">2026. 9. X. (토) 14:00 ~ 18:00</span><br>
+        <span class="ph">장소 (회의 후 확정 · 지도 링크)</span> · <span class="free">무료 (0원)</span>
+      </p>
+      <p class="ease"><span class="mark">코딩 몰라도 됩니다.</span><br>노트북만 들고 오세요.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#">단톡방 입장하기 →</a>
+        <span class="caption">참여코드 <span class="ph">0000 (개설 후 기입)</span></span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="win">
+        <div class="win-bar">
+          <span class="win-dots"><i></i><i></i><i></i></span>
+          <span class="win-title">AI 비서 미리보기</span>
+        </div>
+        <div class="win-body">
+          <div class="msg me">오늘 오전 작업 진행해.</div>
+          <div class="msg ai">
+            <b>진행하겠습니다</b>
+            <ul>
+              <li>메일 14건 확인 — 회신 필요 3건 분류</li>
+              <li>어제 매출 데이터 집계</li>
+              <li>주간 보고서 초안 작성</li>
+            </ul>
+          </div>
+          <div class="msg ai">
+            완료했습니다. 보고서는 PDF로 정리해뒀습니다.
+            <span class="file-chip">📄 주간보고_8월4주.pdf</span>
+          </div>
+        </div>
+      </div>
+      <p class="win-note">연출 화면 · 실제 강의 실습 캡처로 교체 예정</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ② 타겟 자기인식 -->
+  <section>
+    <div class="narrow reveal">
+      <h2>챗GPT, 써보긴 했는데<br>검색이랑 뭐가 다른지 모르겠는 분.</h2>
+      <div class="stats">
+        <div class="stat"><b>63.5%</b><span>AI를 써본 직장인</span></div>
+        <div class="stat"><b>17.1%</b><span>업무에 제대로 쓰는 사람</span></div>
+      </div>
+      <p>직장인 열에 여섯이 써봤지만, 업무에 제대로 쓰는 사람은 열에 둘이 안 됩니다<span class="caption">(한국은행, 2025)</span>. 그 사이 어딘가에 계시다면, 이 4시간이 그 간격을 좁힙니다.</p>
+    </div>
+  </section>
+
+  <!-- ③ 결과물 3개 -->
+  <section class="band">
+    <div class="container">
+      <div class="outcomes-head reveal">
+        <h2>강의장을 나설 때,<br>이 3개가 되어 있습니다</h2>
+      </div>
+      <div class="outcomes">
+        <div class="card outcome reveal" style="--d:.05s">
+          <h3><em>1</em>나만의 AI 업무지침</h3>
+          <div class="mini doc">
+            <span class="doc-bar">나의-업무지침.md</span>
+            <div class="doc-line w80"></div>
+            <div class="doc-line w95"></div>
+            <div class="doc-line hl w70"></div>
+            <div class="doc-line w55"></div>
+          </div>
+          <p class="caption">내 일하는 방식에 맞춘 지침 문서가 컴퓨터에 남습니다.</p>
+        </div>
+        <div class="card outcome reveal" style="--d:.15s">
+          <h3><em>2</em>폴더, 말 한마디로 정리</h3>
+          <div class="mini folders">
+            <div class="frow">📁 문서 <span>PDF 12개 이동</span><i>✓</i></div>
+            <div class="frow">📁 사진 <span>이미지 34개 이동</span><i>✓</i></div>
+            <div class="frow">📁 보관 <span>설치 파일 3개 이동</span><i>✓</i></div>
+          </div>
+          <p class="caption">쌓여 있던 파일이 정리되는 걸 직접 봅니다.</p>
+        </div>
+        <div class="card outcome reveal" style="--d:.25s">
+          <h3><em>3</em>카톡 예약 메시지 자동화</h3>
+          <div class="mini kakao">
+            <div class="kbubble">내일 회의 자료 미리 공유드립니다. 검토 부탁드려요!</div>
+            <span class="ktime">예약 발송 · 내일 오전 9:00 ✓</span>
+          </div>
+          <p class="caption">예약 메시지가 걸린 화면을 내 폰으로 확인합니다.</p>
+        </div>
+      </div>
+      <p class="shot-note reveal">위 화면은 연출 이미지이며, 실제 강의 실습 화면으로 교체됩니다.</p>
+    </div>
+  </section>
+
+  <!-- ④ 시간표 전면 공개 -->
+  <section>
+    <div class="narrow reveal">
+      <h2>4시간, 이렇게 진행합니다</h2>
+      <span class="total-chip">총 4시간</span>
+      <ol class="steps">
+        <li><b>왜 AI인가</b><span class="caption">검색과 뭐가 다른가 — 10분 안에 감 잡기</span></li>
+        <li><b>왜 클로드인가</b><span class="caption">오늘 쓸 도구를 고른 이유</span></li>
+        <li><b>실사용 액션 3개</b><span class="caption">AI 업무지침 · 폴더 정리 · 카톡 예약 메시지 — 전원이 직접 만들고 갑니다</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ④+ 강의 자료 미리보기 -->
+  <section class="band">
+    <div class="container">
+      <div class="outcomes-head reveal">
+        <h2>채팅 한 번에,<br>AI가 내 컴퓨터를 직접 움직입니다</h2>
+        <p style="max-width:600px;margin:0 auto"><b>명령 → 분배 → 병렬 작업 → 결과 수렴</b> — 전 과정을 눈으로 확인하세요. ▶ 재생</p>
+      </div>
+      <div class="deck-wrap reveal">
+        <iframe src="assets/agent-dashboard.html" loading="lazy" title="AI 에이전트 오케스트레이션 데모"></iframe>
+      </div>
+      <p class="deck-note reveal">데모 화면 · 클릭하면 재생됩니다</p>
+    </div>
+  </section>
+
+  <!-- ⑤ 강사 -->
+  <section>
+    <div class="narrow reveal">
+      <h2>강사</h2>
+      <div class="inst">
+        <div class="face">
+          <svg viewBox="0 0 100 100" fill="#9AA7B8"><circle cx="50" cy="34" r="19"/><path d="M12 100c0-22 17-38 38-38s38 16 38 38z"/></svg>
+        </div>
+        <div>
+          <p class="inst-name"><span class="ph">강사 실명 (회의 후 확정)</span></p>
+          <p class="inst-hist"><span class="ph">기업 강의 N회 · 수강생 N명</span></p>
+          <p class="caption" style="margin-top:10px">실물 사진·숫자 이력으로 교체 예정</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ 이런 분은 오지 마세요 -->
+  <section class="band">
+    <div class="narrow reveal">
+      <h2>이런 분은 오지 마세요</h2>
+      <p>이미 클로드코드를 쓰고 계신 분, 코딩을 배우러 오시는 분 — 이 강의가 아깝습니다. <b>완전 처음인 분 기준으로 갑니다.</b></p>
+    </div>
+  </section>
+
+  <!-- ⑦ 정직 블록 -->
+  <section>
+    <div class="narrow reveal">
+      <ul class="honest card">
+        <li>첫 기수라 후기가 없습니다. 대신 커리큘럼을 위에 공개했습니다.</li>
+        <li>수익 보장 같은 건 안 합니다. 내일 출근해서 바로 쓰는 것만 가르칩니다.</li>
+        <li>단톡방은 이 강의 안내에만 씁니다. 광고 없습니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ⑧ FAQ -->
+  <section class="band">
+    <div class="narrow reveal">
+      <h2>자주 묻는 질문</h2>
+      <details>
+        <summary>정말 무료인가요?</summary>
+        <p>네, 전 과정 무료(0원)입니다. <span class="ph">무료인 이유 — 회의 후 문구 확정</span></p>
+      </details>
+      <details>
+        <summary>신청하면 어떻게 진행되나요?</summary>
+        <p>단톡방 입장(참여코드 입력) → 방 공지에 따라 참가 신청 → 사전 설치 안내를 드립니다. 설치 인증까지 마치면 참가 확정입니다.</p>
+      </details>
+      <details>
+        <summary>준비물이 뭔가요?</summary>
+        <p>노트북 하나면 됩니다. 설치 안내는 참가자 단톡방에서 드리고, 따라 하는 데 10분이면 충분합니다.</p>
+      </details>
+      <details>
+        <summary>혼자 가도 되나요?</summary>
+        <p>대부분 혼자 오십니다. 실습은 각자 자기 컴퓨터로 진행합니다.</p>
+      </details>
+      <details>
+        <summary>주차 / 오시는 길</summary>
+        <p><span class="ph">장소 확정 후 주차·교통 안내 기재</span></p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ⑩ 팀 신청 트랙 -->
+  <section style="padding-top:0;padding-bottom:64px">
+    <div class="narrow reveal">
+      <div class="card team">
+        <div>
+          <b>팀/회사 단위로 듣고 싶으신가요?</b>
+          <p class="caption">인원·일정 맞춤 진행이 가능합니다.</p>
+        </div>
+        <a class="btn-line" href="#">단체 신청 문의</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="narrow">© 그레인뱅크 · 문의: <span class="ph">문의 채널 (회의 후 확정)</span></div>
+  </footer>
+</main>
+
+<!-- ⑨ 하단 고정 신청 바 (모바일 전용) -->
+<div class="dock">
+  <div class="dock-in">
+    <div class="dock-info">
+      <b><span class="ph">9. X. (토) 14:00</span></b>
+      선착순 <span class="ph">15</span>명 · 무료
+    </div>
+    <a class="btn" href="#">단톡방 입장하기 →</a>
+  </div>
+</div>
+
+<script>
+// 섹션 1회성 페이드인
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+}), { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// 강의 자료 임베드: 1440×900 원본을 컨테이너 폭에 맞춰 통째로 축소
+const fitDeck = () => document.querySelectorAll('.deck-wrap iframe').forEach(f => {
+  f.style.transform = 'scale(' + (f.parentElement.clientWidth / 1440) + ')';
+});
+addEventListener('resize', fitDeck); fitDeck();
+
+// 데스크톱 상단 바: 히어로가 화면에서 대부분 빠지면 등장
+const topbar = document.getElementById('topbar');
+new IntersectionObserver(([e]) => {
+  topbar.classList.toggle('show', e.intersectionRatio < .2);
+}, { threshold: [0, .2, .5] }).observe(document.getElementById('top'));
+</script>
+</body>
+</html>
