@@ -10,9 +10,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AI 연습실">
 <meta property="og:url" content="https://ai-yeonseupsil.vercel.app/">
-<!-- 금지어 점검(조사 기준: 02_최종세팅.md §B) — "하루 만에"=시간압축 토사,
-     AI강의 사기 피해 4배 증가로 오염된 어휘. 아래 og:title 및 본문 h1에 포함되어 있음. -->
-<meta property="og:title" content="혼자 하면 일 년, 같이 하면 하루 만에 | AI 연습실 무료 강의">
+<!-- og:title 은 카톡 공유 시 첫 문장이라 h1 과 같은 기준을 적용한다(02_최종세팅.md §B). -->
+<meta property="og:title" content="AI 한 번도 안 써봤어도 괜찮습니다 | AI 연습실 무료 강의">
 <meta property="og:description" content="8월 30일(일) 오전 10시 · 서울 용산구 원효로 · 강의료 0원. AI 왕초보를 위한 실습 강의, 선착순 마감.">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
@@ -165,7 +164,7 @@
     font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
                  "Malgun Gothic", "맑은 고딕", sans-serif;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 17px;   /* 조사14: KRDS 기본값. 한글은 획 밀도가 높아 16px에서 뭉갠다 */
     line-height: 1.7;
     letter-spacing: -.02em;
     -webkit-font-smoothing: antialiased;
@@ -385,11 +384,11 @@
       background: var(--surface); margin-bottom: 12px;
     }
     .cmp tbody tr:last-child { margin-bottom: 0; }
-    .cmp tbody th { width: auto; background: var(--paper); font-size: 13.5px; padding: 10px 16px 9px; border-bottom: 1px solid var(--line); }
+    .cmp tbody th { width: auto; background: var(--paper); font-size: 14px; padding: 10px 16px 9px; border-bottom: 1px solid var(--line); }
     .cmp tbody tr:last-child th { border-bottom: 1px solid var(--line); }
     .cmp td { padding: 11px 16px; border-bottom: 1px solid var(--line); }
     .cmp tbody tr td:last-child { border-bottom: 0; }
-    .cmp td::before { content: attr(data-label); display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 3px; color: var(--ink-soft); }
+    .cmp td::before { content: attr(data-label); display: block; font-size: 14px; font-weight: 700; margin-bottom: 3px; color: var(--ink-soft); }
     .cmp td.on::before { color: inherit; opacity: .75; }
   }
 
@@ -715,7 +714,7 @@
 
   .honest { list-style: none; padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow-card); margin-top: 30px; }
   .honest li { padding-left: 30px; position: relative; font-size: 15px; color: var(--ink-mid); }
-  .honest li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 20px; height: 20px; border-radius: 50%; background: var(--neon-pale); color: var(--blue-ink); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .honest li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; background: var(--neon-pale); color: var(--blue-ink); font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
 
   .team-cta { margin-top: 20px; padding: 22px 24px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-card); }
   .team-cta b { font-size: 16.5px; font-weight: 700; }
@@ -754,11 +753,12 @@
       </div>
       <span class="eyebrow">일요일 오전 10시 · 서울 용산구 원효로 · 강의료 0원</span>
 
-      <!-- 금지어 점검(조사 기준: 02_최종세팅.md §B 금지 목록)
-           · "하루 만에" = 시간압축 토사. AI강의 피해 11건(2024)->42건(2025) 4배 급증으로 오염된 어휘
-           · "비법 대공개" = 과장 토사
-           문구 교체는 보류 상태. 대안 방향: 결과물 중심 서술("나설 때 세 가지가 돌아갑니다") -->
-      <h1>혼자 하면 일 년,<br><span class="hl">같이 하면 하루 만에</span> 끝내는<br>클로드 왕초보 탈출 비법 대공개!</h1>
+      <!-- 금지어 교체 완료(조사 기준: 02_최종세팅.md §B).
+           "하루 만에"(시간압축) · "비법 대공개"(과장)를 제거했다. AI강의 피해가
+           11건(2024)->42건(2025)로 늘며 오염된 어휘라 40~50대에겐 역효과다.
+           대신 조사⑪ 결론을 따랐다 — 불안은 이미 최대치이므로 협박·과장이 아니라
+           "용이성 + 따라잡을 수 있는 안전한 자리"가 빈 소구점. -->
+      <h1>AI, 한 번도 안 써봤어도<br><span class="hl">오늘 처음이면 됩니다</span><br>노트북만 들고 오세요</h1>
 
       <p class="lede">
         설치도, 코딩도, 영어도 없습니다. 화면을 같이 켜놓고 한 줄씩 따라 하면
