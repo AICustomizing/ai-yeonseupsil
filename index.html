@@ -886,7 +886,7 @@
                 title="AI가 작업하는 모습 데모"></iframe>
         <a class="demo-open" href="assets/agent-dashboard.html" target="_blank" rel="noopener"><span class="btn btn-primary btn-sm">▶ 데모 크게 보기</span></a>
       </div>
-      <p class="demo-note reveal">AI가 명령을 받아 여러 작업을 동시에 처리하는 과정을 보여주는 데모입니다 · 클릭하면 재생됩니다</p>
+      <p class="demo-note reveal">AI가 명령을 받아 여러 작업을 동시에 처리하는 과정을 보여주는 데모입니다 · 자동으로 반복됩니다</p>
     </div>
   </section>
 
@@ -1165,6 +1165,34 @@
     document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
       f.addEventListener('load', broadcast);
     });
+
+    /* 데모 자동 재생 — 화면에 들어오면 시작하고 벗어나면 멈춘다.
+       iframe 은 자기가 보이는지 스스로 알 수 없어서 부모가 알려준다. */
+    (function () {
+      var wraps = document.querySelectorAll('.demo-wrap');
+      if (!wraps.length) return;
+      var tell = function (w, v) {
+        var f = w.querySelector('iframe');
+        if (!f || !f.contentWindow) return;
+        try { f.contentWindow.postMessage({ type: 'demo-visible', value: v }, '*'); } catch (e) {}
+      };
+      if (!('IntersectionObserver' in window)) {
+        wraps.forEach(function (w) { tell(w, true); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { tell(e.target, e.isIntersecting); });
+      }, { threshold: 0.25 });
+      wraps.forEach(function (w) {
+        io.observe(w);
+        /* 로드가 끝나야 postMessage 가 먹으므로, 뜨는 대로 현재 상태를 다시 알린다. */
+        var f = w.querySelector('iframe');
+        if (f) f.addEventListener('load', function () {
+          var r = w.getBoundingClientRect();
+          tell(w, r.top < innerHeight && r.bottom > 0);
+        });
+      });
+    })();
 
     sync();
   })();

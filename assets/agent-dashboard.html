@@ -714,13 +714,43 @@ function run(){
   /* 완료 → 결과 수렴 */
   WORK.forEach(([s,d],i)=>at(s+d,()=>agentDone(i,750)));
 
-  /* 끝 — 반복 없음 */
+  /* 끝 — 2초 뒤 자동 반복. 화면 밖이면 멈춘다(보이지 않는데 계속 돌 필요 없음). */
   const end=WORK[3][0]+WORK[3][1]+750;
   at(end+1800,()=>$('replayBtn').classList.add('nudge'));
+  at(end+2000,()=>{ if(visible) run(); else pendingRestart=true; });
 }
 
-$('replayBtn').addEventListener('click',run);
-$('playov').addEventListener('click',()=>{$('playov').classList.add('off');run()});
+/* 자동 재생 제어 —
+   부모 페이지가 스크롤로 데모에 도달하면 시작하고, 벗어나면 멈춘다.
+   iframe 은 자기가 화면에 보이는지 스스로 알 수 없어서 부모가 알려준다(postMessage).
+   부모 스크립트가 없거나 실패해도 최소한 한 번은 돌도록 로드 직후 시작한다. */
+let visible=true, pendingRestart=false, started=false;
+
+function startDemo(){
+  if(started) return;
+  started=true;
+  $('playov').classList.add('off');
+  run();
+}
+function setVisible(v){
+  visible=v;
+  if(v){
+    if(!started) startDemo();
+    else if(pendingRestart){ pendingRestart=false; run(); }
+  }
+}
+
+$('replayBtn').addEventListener('click',()=>{started=true;run()});
+$('playov').addEventListener('click',()=>{$('playov').classList.add('off');started=true;run()});
+
+/* 부모에서 보내는 가시성 신호 */
+window.addEventListener('message',e=>{
+  const d=e&&e.data;
+  if(d&&d.type==='demo-visible') setVisible(!!d.value);
+});
+
+/* 단독으로 열었을 때(부모 없음)는 바로 시작 */
+if(parent===window) startDemo();
 
 /* 덱(iframe) 안에서 방향키·스페이스를 부모로 전달 */
 if(parent!==window){
