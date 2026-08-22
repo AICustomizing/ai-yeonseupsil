@@ -12,6 +12,35 @@
     --c1:#1B64DA; --c2:#D95926; --c3:#199E70; --c4:#C98500;
     --good:#0E9F44; --claude:#D97757;
     --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --dot:rgba(16,24,40,.045); --veil:rgba(246,248,251,.72); --wire-hot:#A9B4C4;
+    color-scheme:light;
+  }
+
+  /* ===== 다크 토큰 =====
+     이 파일은 부모(index.html)에 iframe으로 박히므로 스스로 테마를 정해야 한다.
+     1) 부모가 postMessage로 알려준 값  2) 없으면 같은 오리진의 localStorage
+     3) 그것도 없으면 OS 설정. 부모 index.html과 값이 어긋나면 iframe만 튄다.
+     @media 안의 선언은 밖으로 뺄 수 없어 아래 두 블록은 값이 중복된다.
+     ★ 색을 고칠 때는 두 곳을 같이 고칠 것. */
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --bg:#0A111F; --surface:#131D30; --surface2:#172236;
+      --ink:#EAF0FA; --ink2:#AEBCD2; --muted:#8FA0B8;
+      --line:#24314A; --border:rgba(234,240,250,.16);
+      --c1:#6FA8FF; --c2:#F0865A; --c3:#43C596; --c4:#E5AC3A;
+      --good:#3FCB6E; --claude:#E88A66;
+      --dot:rgba(234,240,250,.06); --veil:rgba(10,17,31,.72); --wire-hot:#5C6E8A;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#0A111F; --surface:#131D30; --surface2:#172236;
+    --ink:#EAF0FA; --ink2:#AEBCD2; --muted:#8FA0B8;
+    --line:#24314A; --border:rgba(234,240,250,.16);
+    --c1:#6FA8FF; --c2:#F0865A; --c3:#43C596; --c4:#E5AC3A;
+    --good:#3FCB6E; --claude:#E88A66;
+    --dot:rgba(234,240,250,.06); --veil:rgba(10,17,31,.72); --wire-hot:#5C6E8A;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -24,7 +53,7 @@
   .stage{
     position:relative; width:960px; height:700px;
     background:var(--surface);
-    background-image:radial-gradient(rgba(16,24,40,.045) 1px,transparent 1px);
+    background-image:radial-gradient(var(--dot) 1px,transparent 1px);
     background-size:22px 22px;
     border:1px solid var(--border); border-radius:16px;
     padding:18px 26px 14px; overflow:hidden;
@@ -277,7 +306,7 @@
   .playov{
     position:absolute;inset:0;z-index:20;border-radius:16px;cursor:pointer;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
-    background:rgba(246,248,251,.72);backdrop-filter:blur(3px);
+    background:var(--veil);backdrop-filter:blur(3px);
     transition:opacity .4s;
   }
   .playov.off{opacity:0;pointer-events:none}
@@ -294,9 +323,28 @@
   /* ── 배선 ── */
   #wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
   .wire{fill:none;stroke:var(--line);stroke-width:1.5;transition:stroke .3s}
-  .wire.hot{stroke:#A9B4C4}
+  .wire.hot{stroke:var(--wire-hot)}
   .dot{filter:drop-shadow(0 0 5px currentColor)}
 </style>
+<script>
+  /* 부모(index.html)의 테마를 따라간다.
+     첫 페인트 전에 localStorage를 직접 읽는다 — 같은 오리진이라 부모와 같은 값이고,
+     postMessage를 기다리면 흰 화면이 한 번 번쩍인 뒤 바뀐다.
+     이후 토글은 부모가 보내주는 메시지로 실시간 반영한다. */
+  (function () {
+    var root = document.documentElement;
+    var apply = function (t) {
+      if (t === 'dark' || t === 'light') root.setAttribute('data-theme', t);
+      else root.removeAttribute('data-theme'); /* OS 설정에 위임 */
+    };
+    try { apply(localStorage.getItem('theme')); } catch (e) {}
+    window.addEventListener('message', function (e) {
+      if (e.source !== window.parent) return;
+      var d = e.data;
+      if (d && d.type === 'theme') apply(d.value);
+    });
+  })();
+</script>
 </head>
 <body>
 <div class="stage-wrap" id="wrap">
@@ -490,7 +538,10 @@
 <script>
 const $=id=>document.getElementById(id);
 const stage=$('stage'), wrap=$('wrap'), svg=$('wires'), NS='http://www.w3.org/2000/svg';
-const AG_COLORS=['#1B64DA','#d95926','#199e70','#c98500'];
+/* 점 색은 CSS 토큰에서 읽는다. 하드코딩하면 다크로 바꿔도 라이트 색이 남는다. */
+const cssVar=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const AG_VARS=['--c1','--c2','--c3','--c4'];
+const agColor=i=>cssVar(AG_VARS[i]);
 const CMD='다운로드 폴더 엑셀 전부 확인해서 품목별 개수 정리해줘';
 let timers=[], arrived=0;
 
@@ -574,7 +625,7 @@ function agentDone(i,arriveMs){
   const a=$('ag'+i);
   a.classList.remove('active'); a.classList.add('done');
   badge(i,'완료');
-  sendDot(upPaths[i],arriveMs,AG_COLORS[i],()=>{
+  sendDot(upPaths[i],arriveMs,agColor(i),()=>{
     const row=$('resultNode').querySelectorAll('.rrow')[i];
     row.classList.add('in');
     arrived++;
@@ -635,7 +686,7 @@ function run(){
   /* 2. 분배 펄스 */
   const disp=typed+1300;
   for(let i=0;i<4;i++){
-    at(disp+i*220,()=>sendDot(downPaths[i],850,'#D97757',()=>{
+    at(disp+i*220,()=>sendDot(downPaths[i],850,cssVar('--claude'),()=>{
       const a=$('ag'+i); a.classList.add('active'); badge(i,'작업 중');
     }));
   }
