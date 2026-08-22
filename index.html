@@ -1136,6 +1136,15 @@
       btn.setAttribute('title', label);
       /* 주소창 색도 같이 맞춘다. 안 하면 모바일에서 헤더 위쪽만 파랗게 뜬다. */
       if (meta) meta.setAttribute('content', dark ? '#0A111F' : '#0B5BF0');
+      broadcast();
+    };
+
+    /* iframe(.demo-wrap)은 별도 문서라 부모 CSS가 안 먹는다. 선택값을 넘겨준다.
+       stored가 null이면 "OS 따라가라"는 뜻으로 그대로 전달한다. */
+    var broadcast = function () {
+      document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
+        try { f.contentWindow.postMessage({ type: 'theme', value: stored }, '*'); } catch (e) {}
+      });
     };
 
     btn.addEventListener('click', function () {
@@ -1148,6 +1157,11 @@
     var onSystemChange = function () { if (!stored) sync(); };
     if (mq.addEventListener) mq.addEventListener('change', onSystemChange);
     else if (mq.addListener) mq.addListener(onSystemChange);
+
+    /* 아직 로드 중인 iframe은 위 broadcast를 놓친다. 뜨는 대로 한 번 더 보낸다. */
+    document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
+      f.addEventListener('load', broadcast);
+    });
 
     sync();
   })();
