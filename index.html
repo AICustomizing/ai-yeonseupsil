@@ -202,12 +202,7 @@
     display: block; width: min(268px, 56%); height: auto;
     aspect-ratio: 436 / 104; color: var(--ink); margin-bottom: 14px;
   }
-  nav { display: none; gap: 28px; margin-left: auto; }
-  @media (min-width: 820px) { nav { display: flex; } }
-  nav a { font-size: 14px; font-weight: 500; color: var(--ink-mid); text-decoration: none; }
-  nav a:hover { color: var(--green-ink); }
-
-  /* 테마 토글 — 모바일에선 nav가 숨으므로 이 버튼이 오른쪽 정렬을 맡는다 */
+  /* 테마 토글 — 상단 네비 제거 후 이 버튼이 오른쪽 정렬을 맡는다 */
   .theme-toggle {
     margin-left: auto; flex: none;
     width: 38px; height: 38px; padding: 0;
@@ -217,7 +212,6 @@
     cursor: pointer; -webkit-tap-highlight-color: transparent;
     transition: color .18s ease, border-color .18s ease, background .18s ease;
   }
-  @media (min-width: 820px) { .theme-toggle { margin-left: 0; } }
   .theme-toggle:hover { color: var(--blue-ink); border-color: var(--blue-1); }
   .theme-toggle:focus-visible { outline: 2px solid var(--blue-1); outline-offset: 2px; }
   .theme-toggle svg {
@@ -746,14 +740,6 @@
 <header>
   <div class="wrap navbar">
     <a class="logo" href="#top" aria-label="AI 연습실"><svg class="logo-mark" role="img"><use href="#wordmark"/></svg></a>
-    <nav>
-      <a href="#who">왜 배우나</a>
-      <a href="#compare">혼자 배우기와 차이</a>
-      <a href="#wins">실습</a>
-      <a href="#flow">강의 흐름</a>
-      <a href="#faq">FAQ</a>
-      <a href="신세동/">신세동</a>
-    </nav>
     <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false" aria-label="다크 모드 켜기" title="다크 모드 켜기">
       <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <circle cx="12" cy="12" r="4.2"/>
