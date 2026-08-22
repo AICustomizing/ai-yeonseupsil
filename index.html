@@ -199,13 +199,20 @@
     font-weight: 800; font-size: 16px; letter-spacing: -.05em;
     text-decoration: none; white-space: nowrap;
   }
-  .m-ai { stroke: var(--green); }
-  .m-kr { stroke: currentColor; }
-  .logo-mark { display: block; height: 21px; width: auto; aspect-ratio: 436 / 104; color: var(--ink); }
-  .hero-mark {
-    display: block; width: min(268px, 56%); height: auto;
-    aspect-ratio: 436 / 104; color: var(--ink); margin-bottom: 14px;
+  /* 워드마크 — 예전엔 좌표로 그린 SVG였다. 획 굵기가 전부 균일하고 자간이
+     등간격이라 크게 띄울수록 어색했다. 본문과 같은 Pretendard 로 조판한다. */
+  .wm {
+    font-weight: 800; letter-spacing: -.045em; white-space: nowrap;
+    color: var(--ink); line-height: 1;
   }
+  .wm-ai { color: var(--green-ink); margin-right: .12em; }
+  .logo .wm { font-size: 21px; }
+  .hero-mark {
+    display: block; margin: 0 0 14px;
+    font-size: clamp(38px, 9vw, 56px);
+  }
+  .hero-mark .wm { color: #FFFFFF; }
+  .hero-mark .wm-ai { color: var(--neon); }
   /* 테마 토글 — 상단 네비 제거 후 이 버튼이 오른쪽 정렬을 맡는다 */
   .theme-toggle {
     margin-left: auto; flex: none;
@@ -500,9 +507,8 @@
   section { border-bottom: 0; padding: 64px 0; }
 
   header { background: var(--header-bg); border-bottom: 1px solid var(--line); }
-  .m-ai { stroke: var(--mark-ai, var(--blue-1)); }
-  .m-kr { stroke: currentColor; }
-  .logo-mark, .logo { color: var(--ink); }
+  .logo .wm { color: var(--ink); }
+  .logo .wm-ai { color: var(--blue-1); }
   .eyebrow { color: var(--blue-ink); }
   .tbd { border-bottom-color: var(--blue-2); }
 
@@ -716,43 +722,10 @@
   .team-cta p { font-size: 14px; color: var(--ink-mid); margin-top: 2px; }
 </style>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="wordmark" viewBox="0 0 436 104">
-    <g fill="none" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-      <g class="m-ai">
-        <path d="M6 96 L32 10 L58 96"/>
-        <path d="M17 68 H47"/>
-        <path d="M78 10 V96"/>
-      </g>
-      <g class="m-kr">
-        <g transform="translate(108 0)">
-          <circle cx="28" cy="31" r="21"/>
-          <path d="M84 8 V56"/>
-          <path d="M62 22 H84"/>
-          <path d="M62 42 H84"/>
-          <path d="M10 64 V94 H90"/>
-        </g>
-        <g transform="translate(220 0)">
-          <path d="M24 40 L49 6 L74 40"/>
-          <path d="M8 50 H90"/>
-          <path d="M24 62 V96"/>
-          <path d="M74 62 V96"/>
-          <path d="M24 79 H74"/>
-          <path d="M24 96 H74"/>
-        </g>
-        <g transform="translate(332 0)">
-          <path d="M8 48 L32 8 L56 48"/>
-          <path d="M80 8 V52"/>
-          <path d="M12 62 H84 V78 H12 V94 H84"/>
-        </g>
-      </g>
-    </g>
-  </symbol>
-</svg>
 
 <header>
   <div class="wrap navbar">
-    <a class="logo" href="#top" aria-label="AI 연습실"><svg class="logo-mark" role="img"><use href="#wordmark"/></svg></a>
+    <a class="logo" href="#top"><span class="wm"><span class="wm-ai">AI</span>연습실</span></a>
     <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false" aria-label="다크 모드 켜기" title="다크 모드 켜기">
       <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <circle cx="12" cy="12" r="4.2"/>
@@ -773,7 +746,7 @@
   <!-- ===== HERO ===== -->
   <div class="hero">
     <div class="wrap">
-      <svg class="hero-mark" role="img" aria-label="AI 연습실"><use href="#wordmark"/></svg>
+      <p class="hero-mark"><span class="wm"><span class="wm-ai">AI</span>연습실</span></p>
 
       <div class="toprow">
         <span class="toptag">[8월 30일 무료강의]</span>
