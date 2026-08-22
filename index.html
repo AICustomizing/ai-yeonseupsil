@@ -76,7 +76,11 @@
     --ink-soft: #616F88;
     --grad-blue: linear-gradient(152deg, #0B5BF0 0%, #0E5AD8 46%, #1157C0 78%, #1553A8 100%);
     --grad-green: linear-gradient(135deg, #A9E87E 0%, #CBF6A6 100%);
-    --grad-blue-btn: linear-gradient(135deg, #0B5BF0 0%, #2A8CFF 100%);
+    /* 연두 배경 위에 올라가는 글자색. 연두는 다크에서도 밝은 색 그대로라
+       --ink(다크에서 흰색으로 뒤집힘)를 쓰면 흰 글자가 되어 안 보인다.
+       테마와 무관하게 항상 어두운 값을 유지한다. ★다크 블록에서 재정의 금지 */
+    --on-green: #0C1B33;
+    --grad-blue-btn: linear-gradient(135deg, #0B5BF0 0%, #2472DB 100%);
     --shadow-card: 0 2px 6px rgba(12,27,51,.04), 0 16px 40px -24px rgba(11,91,240,.32);
     --shadow-cta: 0 8px 22px -10px rgba(11,91,240,.55);
     /* 별칭 */
@@ -113,7 +117,7 @@
       --blue-2: #7BB8FF;
       --blue-ink: #8FC0FF;
       --grad-blue: linear-gradient(152deg, #12336E 0%, #143A82 46%, #16407A 78%, #123159 100%);
-      --grad-blue-btn: linear-gradient(135deg, #1D6FE0 0%, #3E9BFF 100%);
+      --grad-blue-btn: linear-gradient(135deg, #1257C4 0%, #2472DB 100%);
       --shadow-card: 0 2px 6px rgba(0,0,0,.32), 0 16px 40px -24px rgba(0,0,0,.6);
       --shadow-cta: 0 8px 22px -10px rgba(0,0,0,.7);
       --violet: #8FC0FF; --violet-deep: #EAF0FA; --orange: #7BB8FF;
@@ -141,7 +145,7 @@
     --blue-2: #7BB8FF;
     --blue-ink: #8FC0FF;
     --grad-blue: linear-gradient(152deg, #12336E 0%, #143A82 46%, #16407A 78%, #123159 100%);
-    --grad-blue-btn: linear-gradient(135deg, #1D6FE0 0%, #3E9BFF 100%);
+    --grad-blue-btn: linear-gradient(135deg, #1257C4 0%, #2472DB 100%);
     --shadow-card: 0 2px 6px rgba(0,0,0,.32), 0 16px 40px -24px rgba(0,0,0,.6);
     --shadow-cta: 0 8px 22px -10px rgba(0,0,0,.7);
     --violet: #8FC0FF; --violet-deep: #EAF0FA; --orange: #7BB8FF;
@@ -371,7 +375,7 @@
     .cmp, .cmp tbody, .cmp tbody tr, .cmp tbody th, .cmp td { display: block; }
     .cmp tbody tr {
       border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
-      background: #FFFFFF; margin-bottom: 12px;
+      background: var(--surface); margin-bottom: 12px;
     }
     .cmp tbody tr:last-child { margin-bottom: 0; }
     .cmp tbody th { width: auto; background: var(--paper); font-size: 13.5px; padding: 10px 16px 9px; border-bottom: 1px solid var(--line); }
@@ -410,10 +414,16 @@
   /* flow */
   .flow { display: grid; gap: 0; border-top: 1px solid var(--ink); }
   .step {
-    display: grid; grid-template-columns: 52px 1fr; gap: 18px;
+    display: grid; grid-template-columns: 52px 1fr; gap: 4px 18px;
     padding: 20px 0; border-bottom: 1px solid var(--line); align-items: baseline;
   }
-  @media (min-width: 760px) { .step { grid-template-columns: 60px 240px 1fr; gap: 24px; } }
+  /* .step 의 자식은 3개(번호/제목/설명)인데 모바일은 2열이라 설명이 두 번째 줄
+     첫 칸(52px)으로 흘러 들어가 글자가 3자씩 끊겼다. 설명은 제목과 같은 칸에 둔다. */
+  .step > p { grid-column: 2; }
+  @media (min-width: 760px) {
+    .step { grid-template-columns: 60px 240px 1fr; gap: 24px; }
+    .step > p { grid-column: 3; }   /* 3열일 땐 설명이 마지막 칸 */
+  }
   .step-no { font-size: 14px; font-weight: 800; color: var(--ink-soft); }
   .step.is-action .step-no { color: var(--green); }
   .step h3 { font-size: 17.5px; font-weight: 700; }
@@ -460,7 +470,7 @@
   .apply-box .s3 { background: #15151A; border-color: #2A2A33; }
   .apply-box .s3 p { color: #FFFFFF; }
   .apply-box .s3s { color: #8E8E99; }
-  .apply-box .tbd { border-bottom-color: var(--neon); color: #A6A6B0; }
+  .apply-box .tbd { border-bottom-color: var(--neon); color: #6E6E7A; }
   .apply-box h2 { font-size: clamp(26px, 4vw, 38px); margin-top: 14px; }
   .apply-box p { margin-top: 16px; color: var(--ink-mid); max-width: 30em; margin-inline: auto; }
   .apply-box .hero-cta { justify-content: center; }
@@ -473,6 +483,9 @@
     background: var(--surface); border: 1px solid var(--line);
     padding: 18px 16px; display: grid; gap: 10px; justify-items: center;
   }
+  /* justify-items:center 때문에 문단이 글자 폭(89px)만큼만 차지해 불필요하게
+     줄이 접혔다. 텍스트는 카드 폭을 다 쓰고 가운데 정렬만 하도록 되돌린다. */
+  .s3 > p { justify-self: stretch; }
   .s3n {
     width: 26px; height: 26px; border-radius: 50%;
     background: var(--neon); color: var(--ink);
@@ -522,14 +535,14 @@
   .hero > .wrap { position: relative; z-index: 1; }
   .hero-mark { color: #FFFFFF; --mark-ai: #C6F79E; }
   .hero .eyebrow { color: rgba(255,255,255,.92); }
-  .toptag { background: var(--grad-green); color: var(--ink); border-radius: 999px; padding: 7px 16px; }
+  .toptag { background: var(--grad-green); color: var(--on-green); border-radius: 999px; padding: 7px 16px; }
   .dday { background: rgba(255,255,255,.1); color: #FFFFFF; }
   .hero h1 { color: #FFFFFF; }
   .hero h1 .hl { color: #C6F79E; background: none; padding: 0; }
   .hero .lede { color: rgba(255,255,255,.88); }
   .hero .lede strong { color: #FFFFFF; }
   .hero-note, .hero .cta-micro { color: rgba(255,255,255,.9); }
-  .hero .btn-primary { background: var(--grad-green); color: var(--ink); box-shadow: 0 10px 26px -12px rgba(0,0,0,.45); }
+  .hero .btn-primary { background: var(--grad-green); color: var(--on-green); box-shadow: 0 10px 26px -12px rgba(0,0,0,.45); }
   .hero .btn-ghost { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); color: #FFFFFF; }
   .hero .btn-ghost:hover { background: var(--surface); color: var(--ink); border-color: var(--surface); }
   .hero-meta { border-top-color: rgba(255,255,255,.28); }
@@ -558,7 +571,7 @@
   .faq details:last-child, .whoitem:last-child, .action:last-child, .step:last-child { border-bottom: 0; }
   .tablewrap { padding: 0; }
   .cmp thead th { background: var(--paper); }
-  .cmp thead th.on { background: var(--grad-green); color: var(--ink); }
+  .cmp thead th.on { background: var(--grad-green); color: var(--on-green); }
   .cmp td.on { background: var(--neon-pale); }
   @media (min-width: 860px) { .ncard:last-child { border-right: 0; } }
   @media (min-width: 800px) { .sp:last-child { border-right: 0; } }
@@ -566,7 +579,7 @@
   .sec-head::before { background: var(--grad-blue-btn); width: 44px; height: 5px; border-radius: 999px; }
   .ncard .no { color: var(--blue-ink); }
   .whoitem svg path { stroke: var(--blue-2); }
-  .action-tag { background: var(--grad-green); color: var(--ink); border-radius: 999px; }
+  .action-tag { background: var(--grad-green); color: var(--on-green); border-radius: 999px; }
   .takeaway { border-left-color: var(--green-1); }
   .secret b { color: var(--blue-ink); }
   .step.is-action .step-no, .step-mini { color: var(--blue-ink); }
@@ -584,7 +597,7 @@
   }
   .ctaband .cb-t { color: #FFFFFF; }
   .ctaband .cb-s { color: rgba(255,255,255,.9); }
-  .ctaband .btn-primary { background: var(--grad-green); color: var(--ink); box-shadow: 0 10px 26px -12px rgba(0,0,0,.4); }
+  .ctaband .btn-primary { background: var(--grad-green); color: var(--on-green); box-shadow: 0 10px 26px -12px rgba(0,0,0,.4); }
 
   /* 신청 = 그라데이션 카드 */
   .apply-box {
@@ -599,11 +612,11 @@
   .apply-box .s3 { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.34); border-radius: 16px; }
   .apply-box .s3 p { color: #FFFFFF; }
   .apply-box .s3s { color: #FFFFFF; }
-  .apply-box .s3n { background: var(--grad-green); color: var(--ink); }
-  .apply-box .tbd { border-bottom-color: rgba(255,255,255,.7); color: rgba(255,255,255,.9); }
-  .apply-box .btn-primary { background: var(--grad-green); color: var(--ink); box-shadow: 0 10px 26px -12px rgba(0,0,0,.45); }
+  .apply-box .s3n { background: var(--grad-green); color: var(--on-green); }
+  .apply-box .tbd { border-bottom-color: rgba(255,255,255,.7); color: #FFFFFF; }
+  .apply-box .btn-primary { background: var(--grad-green); color: var(--on-green); box-shadow: 0 10px 26px -12px rgba(0,0,0,.45); }
 
-  .stickybar { background: rgba(255,255,255,.96); border-top: 1px solid var(--line); backdrop-filter: blur(8px); }
+  .stickybar { background: var(--header-bg); border-top: 1px solid var(--line); backdrop-filter: blur(8px); }
   .stickybar .txt { color: var(--ink); }
   .stickybar .txt span { color: var(--blue-ink); }
 
@@ -1215,6 +1228,14 @@
       });
     };
     window.addEventListener('resize', fitDeck);
+    /* resize 만 듣고 있으면 창 크기가 아니라 컨테이너 폭만 바뀌는 경우
+       (폰트 로드 후 재배치, 스크롤바 등장, 확대/축소)에 스케일이 옛 값으로 남아
+       데모가 잘려 보인다. 컨테이너 자체를 관찰해 그때마다 다시 맞춘다. */
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(fitDeck);
+      document.querySelectorAll('.demo-wrap').forEach(function (w) { ro.observe(w); });
+    }
+    window.addEventListener('load', fitDeck);
     fitDeck();
 
     // 모바일 카드형 비교표: 열 제목을 각 셀의 라벨로 복사
