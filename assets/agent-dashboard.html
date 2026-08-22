@@ -683,5 +683,25 @@ if(parent!==window){
 
 fit(); buildWires(); reset();
 </script>
+<script>
+// 작은 화면(폰)에서도 무대 전체가 화면 중앙에 보이도록 자동 축소
+(function () {
+  var fit = function () {
+    var STAGE_W = 960, STAGE_H = 700;
+    var s = Math.min(window.innerWidth / (STAGE_W + 20), window.innerHeight / (STAGE_H + 20), 1);
+    var w = document.getElementById('wrap');
+    w.style.position = 'fixed';
+    w.style.left = '0';
+    w.style.top = '0';
+    w.style.margin = '0';
+    w.style.transformOrigin = '0 0';
+    w.style.transform = 'translate(' + (window.innerWidth - STAGE_W * s) / 2 + 'px, '
+      + (window.innerHeight - STAGE_H * s) / 2 + 'px) scale(' + s + ')';
+  };
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
+  fit(); setTimeout(fit, 300); setTimeout(fit, 1000);
+})();
+</script>
 </body>
 </html>

@@ -6,20 +6,17 @@
 <title>AI 연습실</title>
 <meta name="description" content="AI를 한 번도 안 써본 분들을 위한 무료 실습 강의. 8월 30일 일요일 오전 10시, 서울 용산구 원효로. 강의료 0원, 선착순 마감.">
 <meta name="theme-color" content="#0B5BF0">
-<!-- TODO(배포): 아래 BASE_URL 3곳을 실제 배포 주소로 교체 후 카카오 캐시 초기화
-     GitHub Pages 사용 시 예상값: https://aicustomizing.github.io/ai-yeonseupsil/ -->
-<link rel="canonical" href="https://aicustomizing.github.io/ai-yeonseupsil/">
+<link rel="canonical" href="https://ai-yeonseupsil.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AI 연습실">
-<meta property="og:url" content="https://aicustomizing.github.io/ai-yeonseupsil/">
+<meta property="og:url" content="https://ai-yeonseupsil.vercel.app/">
 <!-- 금지어 점검(조사 기준: 02_최종세팅.md §B) — "하루 만에"=시간압축 토사,
      AI강의 사기 피해 4배 증가로 오염된 어휘. 아래 og:title 및 본문 h1에 포함되어 있음. -->
 <meta property="og:title" content="혼자 하면 일 년, 같이 하면 하루 만에 | AI 연습실 무료 강의">
 <meta property="og:description" content="8월 30일(일) 오전 10시 · 서울 용산구 원효로 · 강의료 0원. AI 왕초보를 위한 실습 강의, 선착순 마감.">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<!-- TODO(배포): og.png 1200x630 제작 후 절대 URL로 교체. 상대경로는 카카오에서 미인식 -->
-<meta property="og:image" content="https://aicustomizing.github.io/ai-yeonseupsil/assets/og.png">
+<meta property="og:image" content="https://ai-yeonseupsil.vercel.app/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AI 연습실 · 8월 30일(일) 오전 10시 · 강의료 0원">
@@ -30,6 +27,19 @@
   body{margin:0}
   img,svg{max-width:100%}
 </style>
+<script>
+  /* 저장된 테마를 첫 페인트 전에 적용한다. 여기서 늦으면 라이트 화면이 한 번
+     번쩍인 뒤 다크로 바뀐다(FOUC). 저장값이 없으면 아무것도 세팅하지 않고
+     OS 설정(prefers-color-scheme)에 맡긴다. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') {
+        document.documentElement.setAttribute('data-theme', t);
+      }
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
@@ -43,10 +53,15 @@
     font-display: swap;
   }
 
-  /* 흰 배경 고정 — 보는 사람의 다크모드와 무관하게 항상 동일 */
+  /* 라이트가 기본값. 다크는 아래 [data-theme="dark"] 블록에서 토큰만 갈아끼운다.
+     OS 설정을 따라가되, 헤더 토글로 고른 값이 있으면 그게 이긴다. */
   :root {
     color-scheme: light;
     --white: #FFFFFF;
+    --surface: #FFFFFF;
+    --header-bg: rgba(255,255,255,.92);
+    --invert-bg: #0C1B33;
+    --invert-fg: #FFFFFF;
     --page: #F3F6FB;
     --blue-1: #0B5BF0;
     --blue-2: #1E86FF;
@@ -70,6 +85,69 @@
     --green: #A9E87E; --green-ink: #0A4FD0; --green-pale: #EEF9E4; --sky: #1E86FF;
     --azure: #F1F7FF; --turq: #C9F5A4; --blue: #0B5BF0; --blue-btn: #0B5BF0; --aqua: #5FC9DF;
     --maxw: 1120px;
+  }
+
+  /* ===== 다크 토큰 =====
+     두 경로로 켜진다.
+     1) OS가 다크 + 사용자가 라이트를 명시적으로 고르지 않았을 때(아래 @media)
+     2) 토글로 다크를 골랐을 때([data-theme="dark"])
+     @media 안의 선언은 밖으로 뺄 수 없어서 아래 두 블록은 값이 그대로 중복된다.
+     ★ 색을 고칠 때는 반드시 두 곳을 같이 고칠 것.
+     브랜드 블루/그린은 어두운 배경에서 대비가 죽으므로 한 단계씩 밝힌 값을 쓴다. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --white: #0A111F;
+      --page: #0A111F;
+      --surface: #131D30;
+      --paper: #172236;
+      --header-bg: rgba(10,17,31,.88);
+      --invert-bg: #16233C;
+      --invert-fg: #FFFFFF;
+      --line: #24314A;
+      --line-strong: #34455F;
+      --ink: #EAF0FA;
+      --ink-mid: #AEBCD2;
+      --ink-soft: #8FA0B8;
+      --blue-1: #4C9AFF;
+      --blue-2: #7BB8FF;
+      --blue-ink: #8FC0FF;
+      --grad-blue: linear-gradient(152deg, #12336E 0%, #143A82 46%, #16407A 78%, #123159 100%);
+      --grad-blue-btn: linear-gradient(135deg, #1D6FE0 0%, #3E9BFF 100%);
+      --shadow-card: 0 2px 6px rgba(0,0,0,.32), 0 16px 40px -24px rgba(0,0,0,.6);
+      --shadow-cta: 0 8px 22px -10px rgba(0,0,0,.7);
+      --violet: #8FC0FF; --violet-deep: #EAF0FA; --orange: #7BB8FF;
+      --pink-pale: #1B2A22; --neon-pale: #1B2A22; --green-pale: #1B2A22;
+      --green-ink: #C6F79E; --sky: #7BB8FF;
+      --azure: #16223A; --blue: #4C9AFF; --blue-btn: #4C9AFF;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --white: #0A111F;
+    --page: #0A111F;
+    --surface: #131D30;
+    --paper: #172236;
+    --header-bg: rgba(10,17,31,.88);
+    --invert-bg: #16233C;
+    --invert-fg: #FFFFFF;
+    --line: #24314A;
+    --line-strong: #34455F;
+    --ink: #EAF0FA;
+    --ink-mid: #AEBCD2;
+    --ink-soft: #8FA0B8;
+    --blue-1: #4C9AFF;
+    --blue-2: #7BB8FF;
+    --blue-ink: #8FC0FF;
+    --grad-blue: linear-gradient(152deg, #12336E 0%, #143A82 46%, #16407A 78%, #123159 100%);
+    --grad-blue-btn: linear-gradient(135deg, #1D6FE0 0%, #3E9BFF 100%);
+    --shadow-card: 0 2px 6px rgba(0,0,0,.32), 0 16px 40px -24px rgba(0,0,0,.6);
+    --shadow-cta: 0 8px 22px -10px rgba(0,0,0,.7);
+    --violet: #8FC0FF; --violet-deep: #EAF0FA; --orange: #7BB8FF;
+    --pink-pale: #1B2A22; --neon-pale: #1B2A22; --green-pale: #1B2A22;
+    --green-ink: #C6F79E; --sky: #7BB8FF;
+    --azure: #16223A; --blue: #4C9AFF; --blue-btn: #4C9AFF;
   }
 
   * { box-sizing: border-box; }
@@ -107,7 +185,7 @@
   /* header */
   header {
     position: sticky; top: 0; z-index: 60;
-    background: rgba(255,255,255,.92);
+    background: var(--header-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line);
   }
@@ -129,6 +207,34 @@
   nav a { font-size: 14px; font-weight: 500; color: var(--ink-mid); text-decoration: none; }
   nav a:hover { color: var(--green-ink); }
 
+  /* 테마 토글 — 모바일에선 nav가 숨으므로 이 버튼이 오른쪽 정렬을 맡는다 */
+  .theme-toggle {
+    margin-left: auto; flex: none;
+    width: 38px; height: 38px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    background: var(--surface); color: var(--ink-mid);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
+  }
+  @media (min-width: 820px) { .theme-toggle { margin-left: 0; } }
+  .theme-toggle:hover { color: var(--blue-ink); border-color: var(--blue-1); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--blue-1); outline-offset: 2px; }
+  .theme-toggle svg {
+    width: 19px; height: 19px; display: block;
+    fill: none; stroke: currentColor; stroke-width: 1.7;
+  }
+  /* 라이트일 땐 달(=다크로 전환), 다크일 땐 해(=라이트로 전환)를 보여준다 */
+  .theme-toggle .ic-sun { display: none; }
+  .theme-toggle .ic-moon { display: block; }
+  :root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
+  :root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle .ic-sun { display: block; }
+    :root:not([data-theme="light"]) .theme-toggle .ic-moon { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .theme-toggle { transition: none; } }
+
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     font-family: inherit; font-weight: 700; font-size: 15px; letter-spacing: -.03em;
@@ -138,10 +244,12 @@
   }
   .btn-primary { background: var(--neon); color: var(--ink); border-color: var(--ink); }
   .btn-primary:hover { background: var(--ink); color: var(--neon); }
-  .btn-ghost { border-color: var(--ink); color: var(--ink); background: #FFFFFF; }
-  .btn-ghost:hover { background: var(--ink); color: #FFFFFF; }
+  .btn-ghost { border-color: var(--ink); color: var(--ink); background: var(--surface); }
+  .btn-ghost:hover { background: var(--invert-bg); color: var(--invert-fg); }
   .btn-sm { padding: 9px 16px; font-size: 14px; margin-left: auto; }
   @media (min-width: 820px) { .btn-sm { margin-left: 0; padding: 9px 18px; font-size: 14px; } }
+  /* 모바일: 하단 고정 바가 신청을 담당 — 상단 CTA 중복 제거 */
+  @media (max-width: 559px) { header .btn-sm { display: none; } }
   .btn:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 
   /* hero */
@@ -193,7 +301,7 @@
   /* sticky mobile cta */
   .stickybar {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
-    background: var(--ink); border-top: 1px solid var(--ink);
+    background: var(--invert-bg); border-top: 1px solid var(--invert-bg);
     padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
     display: flex; gap: 10px; align-items: center;
   }
@@ -260,6 +368,25 @@
   .cmp td.on { background: var(--neon-pale); font-weight: 600; color: var(--ink); }
   .cmp tbody th { font-weight: 600; color: var(--ink-mid); width: 26%; font-size: 14.5px; }
   .cmp tr:last-child th, .cmp tr:last-child td { border-bottom: 0; }
+
+  /* 모바일: 비교표를 카드 스택으로 — 두 열이 모두 보이게 */
+  @media (max-width: 759px) {
+    .tablewrap { overflow: visible; border: 0; }
+    .cmp { min-width: 0; width: 100%; }
+    .cmp thead { display: none; }
+    .cmp, .cmp tbody, .cmp tbody tr, .cmp tbody th, .cmp td { display: block; }
+    .cmp tbody tr {
+      border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+      background: #FFFFFF; margin-bottom: 12px;
+    }
+    .cmp tbody tr:last-child { margin-bottom: 0; }
+    .cmp tbody th { width: auto; background: var(--paper); font-size: 13.5px; padding: 10px 16px 9px; border-bottom: 1px solid var(--line); }
+    .cmp tbody tr:last-child th { border-bottom: 1px solid var(--line); }
+    .cmp td { padding: 11px 16px; border-bottom: 1px solid var(--line); }
+    .cmp tbody tr td:last-child { border-bottom: 0; }
+    .cmp td::before { content: attr(data-label); display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 3px; color: var(--ink-soft); }
+    .cmp td.on::before { color: inherit; opacity: .75; }
+  }
 
   /* actions (secret-safe) */
   .actions { border-top: 1px solid var(--ink); }
@@ -332,7 +459,7 @@
   details p { margin-top: 12px; font-size: 15px; color: var(--ink-mid); max-width: 52em; }
 
   /* apply */
-  .apply-box { background: var(--ink); border: 1px solid var(--ink); padding: 58px 32px; text-align: center; color: #FFFFFF; }
+  .apply-box { background: var(--invert-bg); border: 1px solid var(--invert-bg); padding: 58px 32px; text-align: center; color: #FFFFFF; }
   .apply-box .eyebrow { color: var(--neon); }
   .apply-box h2 { color: #FFFFFF; }
   .apply-box p { color: #A6A6B0; }
@@ -349,7 +476,7 @@
   @media (min-width: 720px) { .steps3 { grid-template-columns: repeat(4, 1fr); } }
   .s3s { display: block; font-weight: 400; color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
   .s3 {
-    background: #FFFFFF; border: 1px solid var(--line);
+    background: var(--surface); border: 1px solid var(--line);
     padding: 18px 16px; display: grid; gap: 10px; justify-items: center;
   }
   .s3n {
@@ -365,7 +492,7 @@
   html, body { background: var(--page); }
   section { border-bottom: 0; padding: 64px 0; }
 
-  header { background: rgba(255,255,255,.9); border-bottom: 1px solid var(--line); }
+  header { background: var(--header-bg); border-bottom: 1px solid var(--line); }
   .m-ai { stroke: var(--mark-ai, var(--blue-1)); }
   .m-kr { stroke: currentColor; }
   .logo-mark, .logo { color: var(--ink); }
@@ -375,7 +502,7 @@
   .btn { border-radius: 999px; }
   .btn-primary { background: var(--grad-blue-btn); color: #FFFFFF; border-color: transparent; box-shadow: var(--shadow-cta); }
   .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
-  .btn-ghost { border-color: var(--line-strong); color: var(--ink); background: #FFFFFF; }
+  .btn-ghost { border-color: var(--line-strong); color: var(--ink); background: var(--surface); }
   .btn-ghost:hover { border-color: var(--blue-1); color: var(--blue-ink); }
 
   /* 히어로 = 그라데이션 카드 */
@@ -410,7 +537,7 @@
   .hero-note, .hero .cta-micro { color: rgba(255,255,255,.9); }
   .hero .btn-primary { background: var(--grad-green); color: var(--ink); box-shadow: 0 10px 26px -12px rgba(0,0,0,.45); }
   .hero .btn-ghost { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); color: #FFFFFF; }
-  .hero .btn-ghost:hover { background: #FFFFFF; color: var(--ink); border-color: #FFFFFF; }
+  .hero .btn-ghost:hover { background: var(--surface); color: var(--ink); border-color: var(--surface); }
   .hero-meta { border-top-color: rgba(255,255,255,.28); }
   .hero .meta-k { color: rgba(255,255,255,.88); }
   .hero .meta-v { color: #FFFFFF; }
@@ -426,7 +553,7 @@
 
   /* 흰 카드 패널 */
   .wholist, .ncards, .actions, .flow, .faq, .speakers, .tablewrap, .factcard {
-    background: #FFFFFF; border: 1px solid var(--line);
+    background: var(--surface); border: 1px solid var(--line);
     border-radius: 20px; box-shadow: var(--shadow-card); overflow: hidden;
   }
   .wholist, .ncards, .actions, .flow, .faq, .speakers { padding: 6px 28px; }
@@ -436,9 +563,9 @@
   .whoitem:first-child, .faq { border-top: 0; }
   .faq details:last-child, .whoitem:last-child, .action:last-child, .step:last-child { border-bottom: 0; }
   .tablewrap { padding: 0; }
-  .cmp thead th { background: #F7FAFF; }
+  .cmp thead th { background: var(--paper); }
   .cmp thead th.on { background: var(--grad-green); color: var(--ink); }
-  .cmp td.on { background: #F6FCF0; }
+  .cmp td.on { background: var(--neon-pale); }
   @media (min-width: 860px) { .ncard:last-child { border-right: 0; } }
   @media (min-width: 800px) { .sp:last-child { border-right: 0; } }
 
@@ -499,7 +626,7 @@
   .wins { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
   .win {
     display: inline-flex; align-items: center; gap: 7px;
-    border: 1px solid var(--line-strong); background: #FFFFFF;
+    border: 1px solid var(--line-strong); background: var(--surface);
     border-radius: 999px; padding: 9px 16px 9px 13px;
     font-size: 14.5px; font-weight: 600; color: var(--ink);
   }
@@ -548,7 +675,7 @@
 
   /* ===== 병합 추가 컴포넌트 (free-lecture-site 콘텐츠 흡수) ===== */
   .stat-row { display: flex; gap: 14px; margin-top: 22px; }
-  .stat-card { flex: 1; background: #FFFFFF; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-card); padding: 18px 16px; text-align: center; }
+  .stat-card { flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-card); padding: 18px 16px; text-align: center; }
   .stat-card b { display: block; font-size: clamp(24px,3vw,32px); font-weight: 800; color: var(--blue-ink); letter-spacing: -.02em; line-height: 1.2; }
   .stat-card span { font-size: 14px; color: var(--ink-mid); }
   .stat-note { margin-top: 14px; font-size: 14.5px; color: var(--ink-mid); }
@@ -557,15 +684,27 @@
   .notfor { margin-top: 22px; padding: 16px 20px; border-left: 2px dashed var(--blue-2); font-size: 14.5px; color: var(--ink-mid); }
   .notfor strong { color: var(--ink); font-weight: 700; }
 
-  .demo-wrap { position: relative; width: 100%; max-width: 900px; margin: 28px auto 0; aspect-ratio: 8/5; border-radius: 20px; overflow: hidden; background: #FFFFFF; border: 1px solid var(--line); box-shadow: var(--shadow-card); }
+  .demo-wrap { position: relative; width: 100%; max-width: 900px; margin: 28px auto 0; aspect-ratio: 8/5; border-radius: 20px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-card); }
   .demo-wrap iframe { position: absolute; top: 0; left: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; }
+  .demo-open { display: none; }
+  /* 모바일: 축소된 데모는 미리보기로만 두고, 탭하면 전체 화면으로 */
+  @media (max-width: 759px) {
+    .demo-wrap iframe { pointer-events: none; }
+    .demo-open {
+      display: flex; position: absolute; inset: 0; z-index: 2;
+      align-items: flex-end; justify-content: center; padding-bottom: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(255,255,255,.9));
+      text-decoration: none;
+    }
+    .demo-open .btn-sm { margin-left: 0; }
+  }
   .demo-note { margin-top: 14px; text-align: center; font-size: 14px; color: var(--ink-soft); }
 
-  .honest { list-style: none; padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow-card); margin-top: 30px; }
+  .honest { list-style: none; padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow-card); margin-top: 30px; }
   .honest li { padding-left: 30px; position: relative; font-size: 15px; color: var(--ink-mid); }
   .honest li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 20px; height: 20px; border-radius: 50%; background: var(--neon-pale); color: var(--blue-ink); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
 
-  .team-cta { margin-top: 20px; padding: 22px 24px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: #FFFFFF; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-card); }
+  .team-cta { margin-top: 20px; padding: 22px 24px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-card); }
   .team-cta b { font-size: 16.5px; font-weight: 700; }
   .team-cta p { font-size: 14px; color: var(--ink-mid); margin-top: 2px; }
 </style>
@@ -608,13 +747,24 @@
   <div class="wrap navbar">
     <a class="logo" href="#top" aria-label="AI 연습실"><svg class="logo-mark" role="img"><use href="#wordmark"/></svg></a>
     <nav>
-      <a href="#why">왜 배우나</a>
+      <a href="#who">왜 배우나</a>
       <a href="#compare">혼자 배우기와 차이</a>
-      <a href="#actions">실습</a>
+      <a href="#wins">실습</a>
       <a href="#flow">강의 흐름</a>
       <a href="#faq">FAQ</a>
       <a href="신세동/">신세동</a>
     </nav>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false" aria-label="다크 모드 켜기" title="다크 모드 켜기">
+      <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.2"/>
+        <g stroke-linecap="round">
+          <path d="M12 2.4v2.6M12 19v2.6M4.22 4.22l1.84 1.84M17.94 17.94l1.84 1.84M2.4 12h2.6M19 12h2.6M4.22 19.78l1.84-1.84M17.94 6.06l1.84-1.84"/>
+        </g>
+      </svg>
+      <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M20.2 14.2A8.4 8.4 0 1 1 9.8 3.8a6.6 6.6 0 0 0 10.4 10.4Z" stroke-linejoin="round"/>
+      </svg>
+    </button>
     <a class="btn btn-primary btn-sm" href="#" data-openchat>무료 강의 신청하기</a>
   </div>
 </header>
@@ -762,6 +912,7 @@
       <div class="demo-wrap reveal">
         <iframe src="assets/agent-dashboard.html" loading="lazy" width="1440" height="900"
                 title="AI가 작업하는 모습 데모"></iframe>
+        <a class="demo-open" href="assets/agent-dashboard.html" target="_blank" rel="noopener"><span class="btn btn-primary btn-sm">▶ 데모 크게 보기</span></a>
       </div>
       <p class="demo-note reveal">AI가 명령을 받아 여러 작업을 동시에 처리하는 과정을 보여주는 데모입니다 · 클릭하면 재생됩니다</p>
     </div>
@@ -990,6 +1141,49 @@
 </div>
 
 <script>
+  /* 테마 토글.
+     - 저장값이 없으면 OS 설정을 따르고, 토글을 누른 순간부터 저장값이 이긴다.
+     - 저장값이 없는 동안에는 OS 테마 변경도 실시간으로 반영한다. */
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    if (!btn) return;
+
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var meta = document.querySelector('meta[name="theme-color"]');
+
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    if (stored !== 'dark' && stored !== 'light') stored = null;
+
+    var isDark = function () {
+      return stored ? stored === 'dark' : mq.matches;
+    };
+
+    var sync = function () {
+      var dark = isDark();
+      var label = dark ? '라이트 모드 켜기' : '다크 모드 켜기';
+      btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      btn.setAttribute('aria-label', label);
+      btn.setAttribute('title', label);
+      /* 주소창 색도 같이 맞춘다. 안 하면 모바일에서 헤더 위쪽만 파랗게 뜬다. */
+      if (meta) meta.setAttribute('content', dark ? '#0A111F' : '#0B5BF0');
+    };
+
+    btn.addEventListener('click', function () {
+      stored = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', stored);
+      try { localStorage.setItem('theme', stored); } catch (e) {}
+      sync();
+    });
+
+    var onSystemChange = function () { if (!stored) sync(); };
+    if (mq.addEventListener) mq.addEventListener('change', onSystemChange);
+    else if (mq.addListener) mq.addListener(onSystemChange);
+
+    sync();
+  })();
+
   (function () {
     var target = new Date('2026-08-30T10:00:00+09:00');
     var now = new Date();
@@ -1022,6 +1216,15 @@
     };
     window.addEventListener('resize', fitDeck);
     fitDeck();
+
+    // 모바일 카드형 비교표: 열 제목을 각 셀의 라벨로 복사
+    var cmpHeads = document.querySelectorAll('.cmp thead th');
+    document.querySelectorAll('.cmp tbody tr').forEach(function (tr) {
+      tr.querySelectorAll('td').forEach(function (td, i) {
+        var h = cmpHeads[i + 1];
+        if (h) td.setAttribute('data-label', h.textContent.trim());
+      });
+    });
   })();
 </script>
 
