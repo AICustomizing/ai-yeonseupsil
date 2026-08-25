@@ -1,0 +1,7 @@
+# Vercel 업로드 제외 (이 파일이 있으면 .gitignore 대신 이것만 적용됨)
+.git
+.vercel
+강의자료/
+tests/
+index.html.backup-*
+*.md
