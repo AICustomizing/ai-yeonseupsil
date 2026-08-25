@@ -3,278 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>아모데이</title>
-<meta name="description" content="하루 동안 영감을 선물하는 AI 원데이 프로그램 · 8월 29일(토) 오후 3시 · 서울 용산구 · 강의료 0원 · 선착순 10명">
-<meta name="theme-color" content="#FFFFFF">
+<title>AI 연습실</title>
+<meta name="description" content="AI를 한 번도 안 써본 분들을 위한 무료 실습 강의. 8월 30일 일요일 오전 10시, 서울 용산구 원효로. 강의료 0원, 선착순 마감.">
+<meta name="theme-color" content="#0B5BF0">
 <link rel="canonical" href="https://ai-yeonseupsil.vercel.app/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="아모데이">
+<meta property="og:site_name" content="AI 연습실">
 <meta property="og:url" content="https://ai-yeonseupsil.vercel.app/">
 <!-- og:title 은 카톡 공유 시 첫 문장이라 h1 과 같은 기준을 적용한다(02_최종세팅.md §B). -->
-<meta property="og:title" content="AI 한 번도 안 써봤어도 괜찮습니다 | 아모데이 무료 강의">
-<meta property="og:description" content="하루 동안 영감을 선물하는 AI 원데이 프로그램 · 8월 29일(토) 오후 3시 · 서울 용산구 · 강의료 0원 · 선착순 10명">
+<meta property="og:title" content="AI 한 번도 안 써봤어도 괜찮습니다 | AI 연습실 무료 강의">
+<meta property="og:description" content="8월 30일(일) 오전 10시 · 서울 용산구 원효로 · 강의료 0원. AI 왕초보를 위한 실습 강의, 선착순 마감.">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<meta property="og:image" content="https://ai-yeonseupsil.vercel.app/assets/og.png?v=2">
+<meta property="og:image" content="https://ai-yeonseupsil.vercel.app/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="아모데이 · 하루 동안 영감을 선물하는 AI 원데이 프로그램">
+<meta property="og:image:alt" content="AI 연습실 · 8월 30일(일) 오전 10시 · 강의료 0원">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#129668;</text></svg>">
 <style>
   *,*::before,*::after{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
   body{margin:0}
   img,svg{max-width:100%}
-
 </style>
+<script>
+  /* 저장된 테마를 첫 페인트 전에 적용한다. 여기서 늦으면 라이트 화면이 한 번
+     번쩍인 뒤 다크로 바뀐다(FOUC). 저장값이 없으면 아무것도 세팅하지 않고
+     OS 설정(prefers-color-scheme)에 맡긴다. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') {
+        document.documentElement.setAttribute('data-theme', t);
+      }
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
-<!-- ═══════════════ 신전 게이트 인트로 (아모+데이 문) ═══════════════ -->
-<div id="gateIntro" role="dialog" aria-label="아모데이 입장 게이트">
-<style>
-#gateIntro{position:fixed;inset:0;z-index:99999;overflow:hidden;
-  background:linear-gradient(180deg,#040D1F 0%,#071A38 38%,#0B2551 70%,#123B7A 100%);
-  font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
-  transition:opacity .9s ease;}
-#gateIntro.gone{opacity:0;pointer-events:none}
-html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
-
-/* ── 별 하늘 ── */
-#gateIntro .gi-stars{position:absolute;inset:0;pointer-events:none}
-#gateIntro .gi-stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#DCE8FF;animation:giTwinkle 3s ease-in-out infinite}
-@keyframes giTwinkle{0%,100%{opacity:.2}50%{opacity:.95}}
-
-/* ── 무대 ── */
-#gateIntro .gi-scene{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center}
-#gateIntro .gi-floor{position:absolute;left:0;right:0;bottom:0;height:15vh;
-  background:linear-gradient(180deg,#10294E 0%,#091830 100%)}
-#gateIntro .gi-floor::before{content:"";position:absolute;left:50%;top:-2px;transform:translateX(-50%);
-  width:min(70vw,460px);height:100%;
-  background:radial-gradient(ellipse at 50% 0%,rgba(255,226,150,.16) 0%,rgba(255,226,150,0) 70%)}
-#gateIntro .gi-vignette{position:absolute;inset:0;pointer-events:none;
-  box-shadow:inset 0 0 18vmin rgba(0,0,0,.55)}
-
-/* ── 신전 ── */
-#gateIntro .gi-temple{position:relative;width:min(92vw,620px);margin-bottom:13vh;
-  display:flex;flex-direction:column;align-items:stretch;
-  filter:drop-shadow(0 18px 40px rgba(0,0,0,.5));
-  transition:transform 1.8s cubic-bezier(.5,0,.3,1);transform-origin:50% 62%}
-#gateIntro.open .gi-temple{transform:scale(1.14)}
-#gateIntro .gi-pediment{position:relative;height:clamp(50px,9vw,78px)}
-#gateIntro .gi-pediment::before{content:"";position:absolute;inset:0;
-  clip-path:polygon(50% 0,100% 100%,0 100%);
-  background:linear-gradient(180deg,#C9A24B 0%,#A57F2E 100%)}
-#gateIntro .gi-pediment::after{content:"";position:absolute;left:1.2%;right:1.2%;top:5px;bottom:0;
-  clip-path:polygon(50% 0,100% 100%,0 100%);
-  background:linear-gradient(180deg,#F2EAD8 0%,#DDD2B8 60%,#C9BC9E 100%)}
-#gateIntro .gi-entab{height:16px;background:linear-gradient(180deg,#EAE1CC 0%,#CFC3A5 100%);
-  border-top:3px solid #C9A24B;border-bottom:2px solid #8F6F28}
-#gateIntro .gi-cols{display:flex;align-items:stretch;height:clamp(300px,50vh,450px)}
-#gateIntro .gi-col{width:11%;position:relative;border-radius:3px 3px 0 0;
-  background:repeating-linear-gradient(90deg,#E9E0C9 0 14%,#CfC3A4 14% 22%,#E9E0C9 22% 36%),
-             linear-gradient(180deg,#EFE7D4,#CFC3A5);
-  background-blend-mode:multiply;
-  box-shadow:inset -6px 0 10px rgba(0,0,0,.18),inset 6px 0 10px rgba(255,255,255,.25)}
-#gateIntro .gi-col::before{content:"";position:absolute;top:0;left:-8%;right:-8%;height:14px;
-  background:linear-gradient(180deg,#F2EAD8,#CBBE9E);border:1px solid #A88A3D;border-radius:2px}
-
-/* ── 문틀 + 문 ── */
-#gateIntro .gi-doorframe{flex:1;position:relative;background:#140E05;
-  border-left:6px solid #8F6F28;border-right:6px solid #8F6F28}
-#gateIntro .gi-innerlight{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease;
-  background:radial-gradient(ellipse at 50% 45%,#FFF6DC 0%,#FFE9AE 45%,rgba(255,214,120,.25) 80%,transparent 100%)}
-#gateIntro.open .gi-innerlight{opacity:1}
-#gateIntro .gi-doors{position:absolute;inset:0;display:flex;perspective:1500px}
-#gateIntro .gi-door{position:relative;width:50%;height:100%;overflow:hidden;
-  background:linear-gradient(105deg,#F1EBDD 0%,#E2D9C3 48%,#CfC4A6 100%);
-  transition:transform 1.7s cubic-bezier(.6,0,.25,1);backface-visibility:hidden}
-#gateIntro .gi-door::before{content:"";position:absolute;inset:8px;border:2px solid rgba(143,111,40,.45);border-radius:3px;
-  background:repeating-linear-gradient(180deg,transparent 0 23%,rgba(120,100,60,.12) 23% 24.5%,transparent 24.5% 100%)}
-#gateIntro .gi-door-l{transform-origin:left center;border-right:2px solid rgba(90,70,25,.5)}
-#gateIntro .gi-door-r{transform-origin:right center;border-left:2px solid rgba(90,70,25,.5)}
-#gateIntro.open .gi-door-l{transform:rotateY(107deg)}
-#gateIntro.open .gi-door-r{transform:rotateY(-107deg)}
-#gateIntro .gi-door-txt{position:absolute;top:12%;left:50%;transform:translateX(-50%);
-  font-size:clamp(30px,6.4vw,46px);font-weight:800;letter-spacing:.3em;text-indent:.3em;white-space:nowrap;
-  color:#0A46A8;opacity:.92;
-  text-shadow:0 -1px 1px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.65)}
-#gateIntro .gi-ring{position:absolute;bottom:24%;width:26px;height:26px;border-radius:50%;
-  border:5px solid #B9923D;box-shadow:0 3px 4px rgba(0,0,0,.35),inset 0 2px 2px rgba(255,255,255,.4)}
-#gateIntro .gi-door-l .gi-ring{right:14%}
-#gateIntro .gi-door-r .gi-ring{left:14%}
-/* 클로드 스파크 — 문짝마다 절반씩 */
-#gateIntro .gi-spark{position:absolute;top:50%;width:clamp(96px,22vw,150px);height:clamp(96px,22vw,150px);
-  margin-top:calc(clamp(96px,22vw,150px)/-2);
-  filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
-#gateIntro .gi-spark svg{display:block;width:100%;height:100%}
-#gateIntro .gi-spark-l{right:calc(clamp(96px,22vw,150px)/-2)}
-#gateIntro .gi-spark-r{left:calc(clamp(96px,22vw,150px)/-2)}
-
-/* ── 계단 ── */
-#gateIntro .gi-steps{display:flex;flex-direction:column;align-items:center}
-#gateIntro .gi-steps i{height:13px;background:linear-gradient(180deg,#E5DCC5 0%,#BFB294 100%);
-  border-top:2px solid rgba(255,255,255,.5);border-bottom:2px solid rgba(90,70,25,.4)}
-#gateIntro .gi-steps i:nth-child(1){width:104%}
-#gateIntro .gi-steps i:nth-child(2){width:111%}
-#gateIntro .gi-steps i:nth-child(3){width:118%}
-
-/* ── 문 흔들림(도착 시) ── */
-@keyframes giRumble{0%,100%{transform:translate(0,0)}20%{transform:translate(-1.5px,.5px)}40%{transform:translate(1.5px,-.5px)}60%{transform:translate(-1px,0)}80%{transform:translate(1px,.5px)}}
-#gateIntro.arrived:not(.open) .gi-doors{animation:giRumble .45s linear 2}
-
-/* ── 탐험가 ── */
-#gateIntro .gi-explorer{position:absolute;left:50%;bottom:3.5vh;width:74px;opacity:0;
-  transform:translateX(-50%) scale(1.65);transform-origin:bottom center;pointer-events:none}
-#gateIntro.walking .gi-explorer{opacity:1;
-  animation:giWalk 2.6s cubic-bezier(.45,.12,.55,.88) forwards}
-@keyframes giWalk{
-  0%{transform:translateX(-50%) translateY(0) scale(1.65)}
-  100%{transform:translateX(-50%) translateY(-16.5vh) scale(.52)}}
-#gateIntro.open .gi-explorer{opacity:0;transition:opacity .9s ease .3s}
-#gateIntro .gi-figure{animation-play-state:paused}
-#gateIntro.walking .gi-figure{animation:giBob .36s ease-in-out infinite;animation-play-state:running}
-@keyframes giBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
-#gateIntro .gi-leg,#gateIntro .gi-arm{transform-box:fill-box;transform-origin:center top}
-#gateIntro.walking .gi-leg-a{animation:giStep .36s ease-in-out infinite alternate}
-#gateIntro.walking .gi-leg-b{animation:giStep .36s ease-in-out infinite alternate-reverse}
-#gateIntro.walking .gi-arm-a{animation:giStep .36s ease-in-out infinite alternate-reverse}
-#gateIntro.walking .gi-arm-b{animation:giStep .36s ease-in-out infinite alternate}
-@keyframes giStep{from{transform:rotate(-22deg)}to{transform:rotate(22deg)}}
-#gateIntro.arrived .gi-leg,#gateIntro.arrived .gi-arm,#gateIntro.arrived .gi-figure{animation:none}
-
-/* ── 버튼들 ── */
-#gateIntro .gi-open{position:absolute;left:50%;bottom:6vh;transform:translateX(-50%);
-  padding:16px 54px;border:2px solid #C9A24B;border-radius:999px;cursor:pointer;
-  font-family:inherit;font-size:clamp(18px,3.4vw,22px);font-weight:800;letter-spacing:.28em;text-indent:.28em;
-  color:#FFF3D6;background:linear-gradient(180deg,#1E4FA8 0%,#0A2E6E 100%);
-  box-shadow:0 0 0 4px rgba(201,162,75,.18),0 10px 26px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25);
-  animation:giPulse 2.2s ease-in-out infinite;transition:opacity .35s ease,transform .35s ease}
-#gateIntro .gi-open:hover{filter:brightness(1.15)}
-@keyframes giPulse{0%,100%{box-shadow:0 0 0 4px rgba(201,162,75,.15),0 10px 26px rgba(0,0,0,.5)}50%{box-shadow:0 0 0 9px rgba(201,162,75,.32),0 10px 26px rgba(0,0,0,.5)}}
-#gateIntro.opening .gi-open{opacity:0;pointer-events:none;transform:translateX(-50%) scale(.9)}
-#gateIntro .gi-skip{position:absolute;top:calc(14px + env(safe-area-inset-top));right:18px;
-  padding:8px 14px;border:1px solid rgba(255,255,255,.3);border-radius:999px;cursor:pointer;
-  font-family:inherit;font-size:13px;color:rgba(255,255,255,.75);background:rgba(255,255,255,.06)}
-#gateIntro .gi-skip:hover{background:rgba(255,255,255,.15)}
-
-/* ── 플래시 ── */
-#gateIntro .gi-flash{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .55s ease;
-  background:radial-gradient(circle at 50% 58%,#FFF9E8 0%,#FFFFFF 65%)}
-#gateIntro.flash .gi-flash{opacity:1}
-
-@media (prefers-reduced-motion:reduce){
-  #gateIntro *{animation:none!important;transition:none!important}}
-</style>
-
-<div class="gi-stars"></div>
-<div class="gi-scene">
-  <div class="gi-floor"></div>
-  <div class="gi-temple">
-    <div class="gi-pediment"></div>
-    <div class="gi-entab"></div>
-    <div class="gi-cols">
-      <div class="gi-col"></div>
-      <div class="gi-doorframe">
-        <div class="gi-innerlight"></div>
-        <div class="gi-doors">
-          <div class="gi-door gi-door-l">
-            <span class="gi-door-txt">아모</span>
-            <span class="gi-ring"></span>
-            <span class="gi-spark gi-spark-l" aria-hidden="true"></span>
-          </div>
-          <div class="gi-door gi-door-r">
-            <span class="gi-door-txt">데이</span>
-            <span class="gi-ring"></span>
-            <span class="gi-spark gi-spark-r" aria-hidden="true"></span>
-          </div>
-        </div>
-      </div>
-      <div class="gi-col"></div>
-    </div>
-    <div class="gi-steps"><i></i><i></i><i></i></div>
-  </div>
-  <div class="gi-explorer" aria-hidden="true">
-    <div class="gi-figure">
-      <svg viewBox="0 0 62 82" xmlns="http://www.w3.org/2000/svg">
-        <g class="gi-leg gi-leg-a"><rect x="23" y="56" width="7" height="20" rx="3.5" fill="#20304F"/></g>
-        <g class="gi-leg gi-leg-b"><rect x="32" y="56" width="7" height="20" rx="3.5" fill="#2A3D63"/></g>
-        <g class="gi-arm gi-arm-a"><rect x="12.5" y="36" width="6" height="19" rx="3" fill="#2570D8"/></g>
-        <g class="gi-arm gi-arm-b"><rect x="43.5" y="36" width="6" height="19" rx="3" fill="#2570D8"/></g>
-        <rect x="17" y="33" width="28" height="28" rx="9" fill="#2E86FF"/>
-        <rect x="20.5" y="29" width="21" height="25" rx="7" fill="#8A5A2B"/>
-        <rect x="24" y="34" width="14" height="7" rx="3.5" fill="#A8743F"/>
-        <rect x="18.5" y="25.5" width="25" height="5.5" rx="2.75" fill="#EAD9B0"/>
-        <circle cx="31" cy="19" r="9" fill="#F4C9A0"/>
-        <path d="M21.5 16.5 a9.5 8.5 0 0 1 19 0 z" fill="#93702C"/>
-        <ellipse cx="31" cy="16.5" rx="13.5" ry="4.2" fill="#7A5A20"/>
-      </svg>
-    </div>
-  </div>
-  <button type="button" class="gi-open" id="giOpenBtn">입장</button>
-  <button type="button" class="gi-skip" id="giSkipBtn">건너뛰기</button>
-  <div class="gi-flash"></div>
-  <div class="gi-vignette"></div>
-</div>
-
-<script>
-(function(){
-  var gate=document.getElementById('gateIntro');
-  var qs=new URLSearchParams(location.search);
-  var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var seen=false;
-  try{seen=!!sessionStorage.getItem('giSeen');}catch(e){}
-  if(seen&&!qs.has('gate')){gate.remove();return;}
-  document.documentElement.classList.add('gate-lock');
-
-  /* 별 뿌리기 */
-  var stars=gate.querySelector('.gi-stars');
-  for(var i=0;i<70;i++){
-    var s=document.createElement('i');
-    s.style.left=(Math.random()*100)+'%';
-    s.style.top=(Math.random()*58)+'%';
-    s.style.animationDelay=(Math.random()*3)+'s';
-    s.style.transform='scale('+(0.5+Math.random()*1.3)+')';
-    stars.appendChild(s);
-  }
-
-  /* 클로드 스파크 SVG 생성 (문짝 양쪽에 절반씩 걸침) */
-  function sparkSVG(){
-    var R=[46,38,45,40,47,37,45,39,46,38,44,41],rays=[];
-    for(var i=0;i<12;i++){
-      var a=(i*30-90)*Math.PI/180,r=R[i],w=7,
-          ax=Math.cos(a),ay=Math.sin(a),px=-ay,py=ax,
-          x1=ax*8+px*w/2,y1=ay*8+py*w/2,
-          x2=ax*8-px*w/2,y2=ay*8-py*w/2;
-      rays.push('M'+x1.toFixed(1)+' '+y1.toFixed(1)+' L'+(ax*r).toFixed(1)+' '+(ay*r).toFixed(1)+' L'+x2.toFixed(1)+' '+y2.toFixed(1)+' Z');
-    }
-    return '<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="#D97757"><circle r="9"/><path d="'+rays.join(' ')+'"/></g></svg>';
-  }
-  var sparks=gate.querySelectorAll('.gi-spark');
-  for(var j=0;j<sparks.length;j++){sparks[j].innerHTML=sparkSVG();}
-
-  function finish(){
-    try{sessionStorage.setItem('giSeen','1');}catch(e){}
-    gate.classList.add('gone');
-    document.documentElement.classList.remove('gate-lock');
-    setTimeout(function(){if(gate.parentNode)gate.parentNode.removeChild(gate);},1000);
-  }
-  function openSeq(){
-    if(gate.classList.contains('opening'))return;
-    gate.classList.add('opening');
-    if(reduced){finish();return;}
-    gate.classList.add('walking');
-    setTimeout(function(){gate.classList.add('arrived');},2650);
-    setTimeout(function(){gate.classList.add('open');},3350);
-    setTimeout(function(){gate.classList.add('flash');},4450);
-    setTimeout(finish,4950);
-  }
-  document.getElementById('giOpenBtn').addEventListener('click',openSeq);
-  document.getElementById('giSkipBtn').addEventListener('click',finish);
-})();
-</script>
-</div>
-<!-- ═══════════════ /신전 게이트 인트로 ═══════════════ -->
-
 
 
 <style>
@@ -286,41 +52,105 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
     font-display: swap;
   }
 
-  /* 단일 라이트 테마. groupby 민트(#2E86FF) 기준 팔레트. */
+  /* 라이트가 기본값. 다크는 아래 [data-theme="dark"] 블록에서 토큰만 갈아끼운다.
+     OS 설정을 따라가되, 헤더 토글로 고른 값이 있으면 그게 이긴다. */
   :root {
     color-scheme: light;
     --white: #FFFFFF;
     --surface: #FFFFFF;
     --header-bg: #FFFFFF;
-    --invert-bg: #111111;
+    --invert-bg: #0C1B33;
     --invert-fg: #FFFFFF;
-    --page: #F5F8F7;
-    --blue-1: #0270FE;
-    --blue-2: #1A7BFF;
-    --blue-ink: #0A46A8;
-    --green-1: #2E86FF;
-    --green-2: #9CC6FF;
-    --paper: #F5F8F7;
-    --line: #E3E9E7;
-    --line-strong: #C6D0E0;
-    --ink: #111111;
-    --ink-mid: #4A524F;
-    --ink-soft: #69748A;
-    --grad-blue: linear-gradient(157deg, #071A38 0%, #0B2551 40%, #0E2E63 72%, #08172F 100%);
-    --grad-green: linear-gradient(120deg, #2E86FF 0%, #5B95FF 52%, #9CC6FF 100%);
+    --page: #F3F6FB;
+    --blue-1: #0B5BF0;
+    --blue-2: #1E86FF;
+    --blue-ink: #0A4FD0;
+    --green-1: #A9E87E;
+    --green-2: #C9F5A4;
+    --paper: #F3F6FB;
+    --line: #E4EAF3;
+    --line-strong: #CBD8EA;
+    --ink: #0C1B33;
+    --ink-mid: #4A5A75;
+    --ink-soft: #616F88;
+    --grad-blue: linear-gradient(152deg, #0B5BF0 0%, #0E5AD8 46%, #1157C0 78%, #1553A8 100%);
+    --grad-green: linear-gradient(135deg, #A9E87E 0%, #CBF6A6 100%);
     /* 연두 배경 위에 올라가는 글자색. 연두는 다크에서도 밝은 색 그대로라
        --ink(다크에서 흰색으로 뒤집힘)를 쓰면 흰 글자가 되어 안 보인다.
        테마와 무관하게 항상 어두운 값을 유지한다. ★다크 블록에서 재정의 금지 */
-    --on-green: #0A1C3A;
-    --grad-blue-btn: linear-gradient(120deg, #2E86FF 0%, #1A7BFF 100%);
-    --shadow-card: 0 2px 6px rgba(0,0,0,.04), 0 16px 40px -24px rgba(0,0,0,.10);
-    --shadow-cta: 0 8px 22px -10px rgba(0,0,0,.28);
+    --on-green: #0C1B33;
+    --grad-blue-btn: linear-gradient(135deg, #0B5BF0 0%, #2472DB 100%);
+    --shadow-card: 0 2px 6px rgba(12,27,51,.04), 0 16px 40px -24px rgba(11,91,240,.32);
+    --shadow-cta: 0 8px 22px -10px rgba(11,91,240,.55);
     /* 별칭 */
-    --violet: #0A46A8; --violet-deep: #111111; --orange: #1A7BFF;
-    --pink: #9CC6FF; --pink-pale: #EAF2FF; --neon: #2E86FF; --neon-pale: #EAF2FF;
-    --green: #2E86FF; --green-ink: #0A46A8; --green-pale: #EAF2FF; --sky: #1A7BFF;
-    --azure: #F5F8F7; --turq: #9CC6FF; --blue: #0270FE; --blue-btn: #0270FE; --aqua: #0270FE;
+    --violet: #0A4FD0; --violet-deep: #0C1B33; --orange: #1E86FF;
+    --pink: #C9F5A4; --pink-pale: #EEF9E4; --neon: #A9E87E; --neon-pale: #F0FBE6;
+    --green: #A9E87E; --green-ink: #0A4FD0; --green-pale: #EEF9E4; --sky: #1E86FF;
+    --azure: #F1F7FF; --turq: #C9F5A4; --blue: #0B5BF0; --blue-btn: #0B5BF0; --aqua: #5FC9DF;
     --maxw: 1120px;
+  }
+
+  /* ===== 다크 토큰 =====
+     두 경로로 켜진다.
+     1) OS가 다크 + 사용자가 라이트를 명시적으로 고르지 않았을 때(아래 @media)
+     2) 토글로 다크를 골랐을 때([data-theme="dark"])
+     @media 안의 선언은 밖으로 뺄 수 없어서 아래 두 블록은 값이 그대로 중복된다.
+     ★ 색을 고칠 때는 반드시 두 곳을 같이 고칠 것.
+     브랜드 블루/그린은 어두운 배경에서 대비가 죽으므로 한 단계씩 밝힌 값을 쓴다. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --white: #0A111F;
+      --page: #0A111F;
+      --surface: #131D30;
+      --paper: #172236;
+      --header-bg: #0A111F;
+      --invert-bg: #16233C;
+      --invert-fg: #FFFFFF;
+      --line: #24314A;
+      --line-strong: #34455F;
+      --ink: #EAF0FA;
+      --ink-mid: #AEBCD2;
+      --ink-soft: #8FA0B8;
+      --blue-1: #4C9AFF;
+      --blue-2: #7BB8FF;
+      --blue-ink: #8FC0FF;
+      --grad-blue: linear-gradient(152deg, #12336E 0%, #143A82 46%, #16407A 78%, #123159 100%);
+      --grad-blue-btn: linear-gradient(135deg, #1257C4 0%, #2472DB 100%);
+      --shadow-card: 0 2px 6px rgba(0,0,0,.32), 0 16px 40px -24px rgba(0,0,0,.6);
+      --shadow-cta: 0 8px 22px -10px rgba(0,0,0,.7);
+      --violet: #8FC0FF; --violet-deep: #EAF0FA; --orange: #7BB8FF;
+      --pink-pale: #1B2A22; --neon-pale: #1B2A22; --green-pale: #1B2A22;
+      --green-ink: #C6F79E; --sky: #7BB8FF;
+      --azure: #16223A; --blue: #4C9AFF; --blue-btn: #4C9AFF;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --white: #0A111F;
+    --page: #0A111F;
+    --surface: #131D30;
+    --paper: #172236;
+    --header-bg: #0A111F;
+    --invert-bg: #16233C;
+    --invert-fg: #FFFFFF;
+    --line: #24314A;
+    --line-strong: #34455F;
+    --ink: #EAF0FA;
+    --ink-mid: #AEBCD2;
+    --ink-soft: #8FA0B8;
+    --blue-1: #4C9AFF;
+    --blue-2: #7BB8FF;
+    --blue-ink: #8FC0FF;
+    --grad-blue: linear-gradient(152deg, #12336E 0%, #143A82 46%, #16407A 78%, #123159 100%);
+    --grad-blue-btn: linear-gradient(135deg, #1257C4 0%, #2472DB 100%);
+    --shadow-card: 0 2px 6px rgba(0,0,0,.32), 0 16px 40px -24px rgba(0,0,0,.6);
+    --shadow-cta: 0 8px 22px -10px rgba(0,0,0,.7);
+    --violet: #8FC0FF; --violet-deep: #EAF0FA; --orange: #7BB8FF;
+    --pink-pale: #1B2A22; --neon-pale: #1B2A22; --green-pale: #1B2A22;
+    --green-ink: #C6F79E; --sky: #7BB8FF;
+    --azure: #16223A; --blue: #4C9AFF; --blue-btn: #4C9AFF;
   }
 
   * { box-sizing: border-box; }
@@ -342,17 +172,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   }
 
   h1, h2, h3, h4 { margin: 0; font-weight: 800; line-height: 1.3; letter-spacing: -.04em; text-wrap: balance; }
-  p { margin: 0; text-wrap: pretty; }
-  li, dd, td, th { text-wrap: pretty; }
-
-  /* 한국어 줄바꿈: 붙어 있어야 의미가 사는 덩어리를 감싸는 유틸 */
-  .nb { white-space: nowrap; }
-
-  /* 모바일에서는 balance가 헤드라인 첫 줄을 과하게 줄여 어절을 갈라놓는다.
-     pretty로 바꿔 자연스럽게 채우되 고아 줄만 막는다. */
-  @media (max-width: 719px) {
-    h1, h2, h3, h4 { text-wrap: pretty; }
-  }
+  p { margin: 0; }
   a { color: inherit; }
   table { border-collapse: collapse; width: 100%; }
 
@@ -386,19 +206,38 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   }
   .wm-ai { color: var(--green-ink); margin-right: .12em; }
   .logo .wm { font-size: 21px; }
-  .navbar > .btn { margin-left: auto; }
   .hero-mark {
     display: block; margin: 0 0 14px;
     font-size: clamp(38px, 9vw, 56px);
   }
   .hero-mark .wm { color: #FFFFFF; }
   .hero-mark .wm-ai { color: var(--neon); }
-
-  /* 워드마크 이미지 — 검은 획 + 투명 배경 1장으로 쓴다.
-     밝은 배경에선 원본 그대로, 어두운 배경(히어로·다크모드)에선 invert로 흰색. */
-  .wm-img { display: block; width: auto; height: 20px; }
-  .hero-mark .wm-img { height: clamp(34px, 7.5vw, 50px); filter: invert(1); }
   /* 테마 토글 — 상단 네비 제거 후 이 버튼이 오른쪽 정렬을 맡는다 */
+  .theme-toggle {
+    margin-left: auto; flex: none;
+    width: 38px; height: 38px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    background: var(--surface); color: var(--ink-mid);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .theme-toggle:hover { color: var(--blue-ink); border-color: var(--blue-1); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--blue-1); outline-offset: 2px; }
+  .theme-toggle svg {
+    width: 19px; height: 19px; display: block;
+    fill: none; stroke: currentColor; stroke-width: 1.7;
+  }
+  /* 라이트일 땐 달(=다크로 전환), 다크일 땐 해(=라이트로 전환)를 보여준다 */
+  .theme-toggle .ic-sun { display: none; }
+  .theme-toggle .ic-moon { display: block; }
+  :root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
+  :root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle .ic-sun { display: block; }
+    :root:not([data-theme="light"]) .theme-toggle .ic-moon { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .theme-toggle { transition: none; } }
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -549,17 +388,8 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
     .cmp tbody tr:last-child th { border-bottom: 1px solid var(--line); }
     .cmp td { padding: 11px 16px; border-bottom: 1px solid var(--line); }
     .cmp tbody tr td:last-child { border-bottom: 0; }
-    /* 모바일에선 헤더 행이 사라지므로 각 칸이 어느 쪽 얘긴지 스스로 밝혀야 한다 */
-    .cmp td { padding-left: 16px; border-left: 3px solid transparent; }
-    .cmp td::before {
-      content: "✕  " attr(data-label); display: block;
-      font-size: 13px; font-weight: 700; margin-bottom: 4px;
-      color: var(--ink-soft); letter-spacing: -.02em;
-    }
-    .cmp td.on { border-left-color: var(--green); }
-    .cmp td.on::before { content: "✓  " attr(data-label); color: var(--green-ink); opacity: 1; }
-    .cmp td { font-size: 15.5px; }
-    .cmp td.on { font-weight: 700; }
+    .cmp td::before { content: attr(data-label); display: block; font-size: 14px; font-weight: 700; margin-bottom: 3px; color: var(--ink-soft); }
+    .cmp td.on::before { color: inherit; opacity: .75; }
   }
 
   /* actions (secret-safe) */
@@ -643,7 +473,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   .apply-box .eyebrow { color: var(--neon); }
   .apply-box h2 { color: #FFFFFF; }
   .apply-box p { color: #A6A6B0; }
-  .apply-box .s3 { background: #141414; border-color: #2E2E2E; }
+  .apply-box .s3 { background: #15151A; border-color: #2A2A33; }
   .apply-box .s3 p { color: #FFFFFF; }
   .apply-box .s3s { color: #8E8E99; }
   .apply-box .tbd { border-bottom-color: var(--neon); color: #6E6E7A; }
@@ -653,7 +483,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   .steps3 {
     display: grid; gap: 12px; margin: 32px auto 4px; max-width: 660px;
   }
-  @media (min-width: 720px) { .steps3 { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 720px) { .steps3 { grid-template-columns: repeat(4, 1fr); } }
   .s3s { display: block; font-weight: 400; color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
   .s3 {
     background: var(--surface); border: 1px solid var(--line);
@@ -682,7 +512,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   .tbd { border-bottom-color: var(--blue-2); }
 
   .btn { border-radius: 999px; }
-  .btn-primary { background: var(--grad-blue-btn); color: var(--on-green); border-color: transparent; box-shadow: var(--shadow-cta); }
+  .btn-primary { background: var(--grad-blue-btn); color: #FFFFFF; border-color: transparent; box-shadow: var(--shadow-cta); }
   .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
   .btn-ghost { border-color: var(--line-strong); color: var(--ink); background: var(--surface); }
   .btn-ghost:hover { border-color: var(--blue-1); color: var(--blue-ink); }
@@ -692,28 +522,28 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
     background: var(--grad-blue); color: #FFFFFF; border-bottom: 0;
     border-radius: 28px; margin: 20px auto 0; max-width: calc(var(--maxw) + 48px);
     padding: 36px 0 32px; overflow: hidden; position: relative;
-    box-shadow: 0 30px 70px -42px rgba(0,0,0,.55);
+    box-shadow: 0 30px 70px -42px rgba(11,91,240,.7);
   }
   .hero::after {
     content: ""; position: absolute; right: -14%; top: -34%;
     width: 62%; aspect-ratio: 1; border-radius: 50%;
-    background: radial-gradient(circle, rgba(76,140,255,.16) 0%, rgba(76,140,255,0) 66%);
+    background: radial-gradient(circle, rgba(169,232,126,.28) 0%, rgba(169,232,126,0) 66%);
     pointer-events: none;
   }
   /* 브랜드 청록·연두: 텍스트 행에 닿지 않는 우하단 코너에만. 최대 알파 .22 = .88 흰 글자 4.86:1 확보 */
   .hero::before {
     content: ""; position: absolute; right: -8%; bottom: -34%;
     width: 58%; aspect-ratio: 1; border-radius: 50%;
-    background: radial-gradient(circle, rgba(76,140,255,.07) 0%, rgba(76,140,255,.08) 46%, rgba(76,140,255,0) 74%);
+    background: radial-gradient(circle, rgba(79,183,217,.22) 0%, rgba(169,232,126,.14) 46%, rgba(169,232,126,0) 74%);
     pointer-events: none;
   }
   .hero > .wrap { position: relative; z-index: 1; }
-  .hero-mark { color: #FFFFFF; --mark-ai: #0270FE; }
+  .hero-mark { color: #FFFFFF; --mark-ai: #C6F79E; }
   .hero .eyebrow { color: rgba(255,255,255,.92); }
   .toptag { background: var(--grad-green); color: var(--on-green); border-radius: 999px; padding: 7px 16px; }
   .dday { background: rgba(255,255,255,.1); color: #FFFFFF; }
   .hero h1 { color: #FFFFFF; }
-  .hero h1 .hl { color: #0270FE; background: none; padding: 0; }
+  .hero h1 .hl { color: #C6F79E; background: none; padding: 0; }
   .hero .lede { color: rgba(255,255,255,.88); }
   .hero .lede strong { color: #FFFFFF; }
   .hero-note, .hero .cta-micro { color: rgba(255,255,255,.9); }
@@ -724,10 +554,10 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   .hero .meta-k { color: rgba(255,255,255,.88); }
   .hero .meta-v { color: #FFFFFF; }
   .hero .meta-v .sub { color: rgba(255,255,255,.88); }
-  .hero .meta-v .free { color: #0270FE; }
+  .hero .meta-v .free { color: #C6F79E; }
   .hero .tbd { border-bottom-color: rgba(255,255,255,.55); }
   .hero .win { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.42); color: #FFFFFF; }
-  .hero .win::before { background: #0270FE; box-shadow: none; }
+  .hero .win::before { background: #C6F79E; box-shadow: none; }
   .hero .trust { border-top-color: rgba(255,255,255,.24); color: rgba(255,255,255,.92); }
   .hero .trust strong { color: #FFFFFF; }
   .hero .trust-k { color: rgba(255,255,255,.9); border-color: rgba(255,255,255,.5); }
@@ -768,7 +598,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   /* 중간 CTA 밴드 = 그라데이션 */
   .ctaband {
     background: var(--grad-blue); border: 0; color: #FFFFFF;
-    border-radius: 20px; box-shadow: 0 24px 56px -36px rgba(0,0,0,.55);
+    border-radius: 20px; box-shadow: 0 24px 56px -36px rgba(11,91,240,.7);
   }
   .ctaband .cb-t { color: #FFFFFF; }
   .ctaband .cb-s { color: rgba(255,255,255,.9); }
@@ -778,7 +608,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   .apply-box {
     background: var(--grad-blue); border: 0; color: #FFFFFF;
     border-radius: 28px; padding: 62px 32px;
-    box-shadow: 0 30px 70px -42px rgba(0,0,0,.55);
+    box-shadow: 0 30px 70px -42px rgba(11,91,240,.7);
   }
   .apply-box .eyebrow { color: rgba(255,255,255,.92); }
   .apply-box h2 { color: #FFFFFF; }
@@ -803,6 +633,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
     .hero-cta .btn { width: 100%; }
   }
   .cta-micro { margin-top: 8px; font-size: 14px; color: var(--ink-soft); }
+  .applynote { margin-top: 10px; font-size: 14px; }
 
   .wins { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
   .win {
@@ -879,7 +710,6 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
     }
     .demo-open .btn-sm { margin-left: 0; }
   }
-  .demo-lead { margin-top: 40px; text-align: center; font-size: 15px; font-weight: 800; letter-spacing: -.03em; color: var(--green-ink); }
   .demo-note { margin-top: 14px; text-align: center; font-size: 14px; color: var(--ink-soft); }
 
   .honest { list-style: none; padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow-card); margin-top: 30px; }
@@ -889,268 +719,77 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   .team-cta { margin-top: 20px; padding: 22px 24px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-card); }
   .team-cta b { font-size: 16.5px; font-weight: 700; }
   .team-cta p { font-size: 14px; color: var(--ink-mid); margin-top: 2px; }
-  /* ===== 호스트 카드 ===== */
-  .hostcard { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 26px 26px 24px; box-shadow: var(--shadow-card); }
-  .hc-top { display: flex; gap: 18px; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-  .hc-top .sp-photo { margin-bottom: 0; flex: none; }
-  .sp-role2 { font-size: 14.5px; color: var(--ink-mid); margin-top: 3px; }
-  .hc-line { margin-top: 18px; font-size: 16px; font-weight: 700; }
-  .hc-quote { margin-top: 18px; background: var(--grad-green); color: var(--on-green); border-radius: 14px; padding: 16px 18px; font-size: 15px; font-weight: 700; }
-  .lede-sub { margin-top: 12px; font-size: 15px; line-height: 1.75; }
-  .hero .lede-sub { color: rgba(255,255,255,.78); }
-
-  /* ===== 애니메이션 =====
-     원칙: 느리게, 한 번만, 이유 있을 때만. 상시 반짝임은 싸구려로 읽힌다. */
-
-  /* 등장: 위로 떠오르며 초점이 맞는 느낌(블러 → 선명) */
-  .reveal {
-    opacity: 0; transform: translateY(26px); filter: blur(6px);
-    transition: opacity .9s cubic-bezier(.16,1,.3,1),
-                transform .9s cubic-bezier(.16,1,.3,1),
-                filter .9s cubic-bezier(.16,1,.3,1);
-  }
-  .reveal.in { opacity: 1; transform: none; filter: none; }
-  .reveal.pop { transform: translateY(30px) scale(.97); }
-  .reveal.pop.in { transform: none; }
-
-  /* 히어로: 로드되자마자 위에서부터 차례로 */
-  .hero .wrap > * { opacity: 0; transform: translateY(18px); animation: heroIn .95s cubic-bezier(.16,1,.3,1) forwards; }
-  .hero .wrap > *:nth-child(1) { animation-delay: .05s; }
-  .hero .wrap > *:nth-child(2) { animation-delay: .14s; }
-  .hero .wrap > *:nth-child(3) { animation-delay: .23s; }
-  .hero .wrap > *:nth-child(4) { animation-delay: .32s; }
-  .hero .wrap > *:nth-child(5) { animation-delay: .41s; }
-  .hero .wrap > *:nth-child(6) { animation-delay: .50s; }
-  .hero .wrap > *:nth-child(7) { animation-delay: .59s; }
-  @keyframes heroIn { to { opacity: 1; transform: none; } }
-
-  /* 버튼: 평소엔 조용하고, 큰 CTA만 아주 느리게 숨쉰다 */
-  .btn { transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, filter .35s ease; }
-  .btn-primary { position: relative; overflow: hidden; background-size: 200% 100%; }
-  .btn-primary::after {
-    content: ""; position: absolute; inset: 0 auto 0 -70%; width: 45%;
-    background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.45), rgba(255,255,255,0));
-    transform: skewX(-16deg); pointer-events: none; opacity: 0;
-  }
-  .btn-lg::after, .btn-xl::after, .stickybar .btn-primary::after {
-    opacity: 1; animation: sheen 9s cubic-bezier(.4,0,.2,1) infinite;
-  }
-  .btn-primary:hover::after { opacity: 1; animation: sheen 1.1s cubic-bezier(.4,0,.2,1); }
-  @keyframes sheen { 0% { left: -70%; } 22%, 100% { left: 150%; } }
-  .btn-lg, .btn-xl, .stickybar .btn-primary { animation: gradShift 12s ease-in-out infinite; }
-  @keyframes gradShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -14px rgba(76,140,255,.65); }
-  .btn:active { transform: translateY(0) scale(.985); transition-duration: .08s; }
-
-  /* 히어로 배경 빛: 아주 느린 표류 */
-  .hero::after { animation: glowA 22s ease-in-out infinite alternate; }
-  .hero::before { animation: glowB 29s ease-in-out infinite alternate; }
-  @keyframes glowA { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-6%,4%,0) scale(1.14); } }
-  @keyframes glowB { from { transform: translate3d(0,0,0) scale(1.08); } to { transform: translate3d(5%,-5%,0) scale(.94); } }
-
-  /* 카드: 들어올리되 과하지 않게 */
-  .action, .whoitem, .ncard, .step, .sp, .stat-card, .hostcard, .s3 {
-    transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease;
-  }
-  .action:hover, .whoitem:hover, .stat-card:hover { transform: translateY(-3px); }
-  .hostcard:hover { transform: translateY(-3px); box-shadow: 0 18px 44px -26px rgba(0,0,0,.28); }
-
-  /* FAQ: 열릴 때 답이 부드럽게 내려온다 */
-  details[open] > p { animation: faqIn .45s cubic-bezier(.16,1,.3,1); }
-  @keyframes faqIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
-  summary::after { transition: transform .3s cubic-bezier(.16,1,.3,1); }
-  details[open] summary::after { transform: rotate(180deg); }
-
-  /* 상단 스크롤 진행 표시 */
-  .progress {
-    position: fixed; top: 0; left: 0; height: 2px; width: 100%; z-index: 90;
-    background: var(--grad-green); transform: scaleX(0); transform-origin: 0 50%;
-    pointer-events: none;
-  }
-  /* 스크롤하면 헤더가 살짝 가라앉는다 */
-  header { transition: box-shadow .35s ease, background-color .35s ease; }
-  header.scrolled { box-shadow: 0 6px 24px -18px rgba(0,0,0,.45); }
-  .navbar { transition: height .35s cubic-bezier(.16,1,.3,1); }
-  header.scrolled .navbar { height: 56px; }
-
-  /* 숫자는 굴러 올라간다 */
-  .stat-card b { font-variant-numeric: tabular-nums; }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .reveal, .hero .wrap > * { opacity: 1 !important; transform: none !important; filter: none !important; }
-    .progress { display: none; }
-  }
-
-  /* ===== 모바일 마무리 ===== */
-  @media (max-width: 719px) {
-    /* 손가락으로 누를 영역을 44px 이상으로 (Apple/Google 권장 최소치) */
-    summary { min-height: 44px; align-items: center; }
-    .logo { padding: 10px 4px; margin-left: -4px; }
-    .stickybar .btn { min-height: 46px; }
-
-    /* 호스트 카드: 좁은 화면에서 사진을 줄여 글이 눌리지 않게 */
-    .hostcard { padding: 22px 18px 20px; }
-    .hc-top { gap: 14px; }
-    .hc-top .sp-photo { width: 72px; height: 72px; font-size: 12px; }
-    .hc-quote { font-size: 14.5px; padding: 14px 15px; }
-
-    /* 상단 태그 줄바꿈 대비 */
-    .toprow { gap: 8px; flex-wrap: wrap; }
-    .toptag { font-size: 14px; padding: 7px 13px; }
-
-    /* 긴 영문·URL이 화면 밖으로 튀지 않게 */
-    p, li, td, th, summary, h1, h2, h3 { overflow-wrap: anywhere; }
-  }
-  @media (max-width: 400px) {
-    /* 상단 태그가 길어 D-day와 한 줄에 못 들어간다 */
-    .toptag { font-size: 12.5px; padding: 6px 11px; }
-    .dday { font-size: 12.5px; }
-    /* 호스트 카드는 사진을 위로 올려 글줄 폭 확보 */
-    .hc-top { flex-direction: column; align-items: flex-start; }
-    .hc-top .sp-photo { width: 68px; height: 68px; }
-  }
-  @media (max-width: 380px) {
-    footer { font-size: 13px; }
-    .stickybar .txt, .stickybar .txt span { font-size: 13px; }
-  }
-
-/* ══ 수정본 추가 CSS (아래 블록 전체가 이번 수정분) ══ */
-/* 히어로 라이트 전환 (다크 그라디언트 제거) */
-.hero{background-image:none !important;background:var(--surface);border:1px solid var(--line);}
-.hero h1{color:var(--ink);}
-.hero .lede{color:var(--ink-mid);font-size:clamp(17px,2vw,20px);line-height:1.72;}
-.hero .hl{color:var(--blue-ink);}
-.hero .dday{background:rgba(0,0,0,.06);color:var(--ink-mid);}
-.hero .btn-ghost{border-color:var(--line-strong);color:var(--ink);}
-
-/* 통계 막대 그래프 */
-.stat-chart{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:34px 40px 28px;box-shadow:var(--shadow-card);}
-.stat-chart .ch-title{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--ink-soft);margin:0;}
-.stat-chart .ch{position:relative;height:340px;margin-top:34px;}
-.stat-chart .ch-grid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;}
-.stat-chart .ch-grid i{display:block;border-top:1px dashed var(--line);}
-.stat-chart .ch-bars{position:relative;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:clamp(48px,12vw,160px);border-bottom:2px solid var(--line-strong);}
-.stat-chart .col{position:relative;height:100%;width:clamp(80px,14vw,132px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;}
-.stat-chart .col i{width:100%;height:0;border-radius:14px 14px 0 0;background:var(--line-strong);transition:height .8s cubic-bezier(.22,1,.36,1);}
-.stat-chart .col b{font-size:clamp(28px,3.8vw,40px);font-weight:800;letter-spacing:-.03em;color:var(--ink-soft);margin-bottom:10px;line-height:1;font-variant-numeric:tabular-nums;}
-.stat-chart .col.on b{color:var(--blue-ink);}
-.stat-chart .col.on i{background:var(--grad-blue-btn);transition-delay:.12s;}
-.stat-chart .tip{position:relative;background:var(--blue-1);color:var(--on-green);font-weight:800;font-size:16px;padding:12px 20px;border-radius:14px;margin-bottom:22px;white-space:nowrap;opacity:0;transform:translateY(6px);transition:opacity .4s ease .6s,transform .4s ease .6s;}
-.stat-chart .tip:after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);border:8px solid transparent;border-top-color:var(--blue-1);}
-.stat-chart.go .tip{opacity:1;transform:translateY(0);}
-.stat-chart .ch-x{display:flex;justify-content:center;gap:clamp(48px,12vw,160px);margin-top:16px;}
-.stat-chart .ch-x span{width:clamp(80px,14vw,132px);text-align:center;font-size:16.5px;font-weight:700;color:var(--ink-mid);line-height:1.45;}
-.stat-chart .ch-x span.on{color:var(--ink);}
-@media (max-width:720px){.stat-chart{padding:24px 18px 20px;}.stat-chart .ch{height:250px;}}
-@media (prefers-reduced-motion:reduce){.stat-chart .col i,.stat-chart .tip{transition:none;}}
-
-/* 강의자 / 보조 강사 */
-.who-tag{display:inline-block;background:var(--blue-1);color:var(--on-green);font-size:13px;font-weight:800;letter-spacing:.04em;padding:6px 14px;border-radius:999px;}
-.hostcard{position:relative;}
-.hostcard > .who-tag{position:absolute;top:22px;right:22px;}
-@media (max-width:820px){.hostcard > .who-tag{position:static;margin-bottom:12px;}}
-.who-tag.ghost{background:color-mix(in srgb, var(--blue-1) 16%, transparent);color:var(--blue-ink);margin-bottom:10px;}
-.assist-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
-@media (max-width:820px){.assist-grid{grid-template-columns:1fr;}}
-.assist{display:flex;align-items:center;gap:20px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow-card);}
-.assist .sp-photo{flex:0 0 92px;width:92px;height:92px;}
-.assist .sp-name{margin:0 0 4px;}
-
-/* 가독성 */
-.lede,.sec-lede,.card p{line-height:1.7;}
-
-/* 블루/민트 비교용 — 확정 후 이 블록과 헤더 버튼, JS 토글부만 지우면 됨 */
-
-.theme-switch{display:flex;gap:6px;margin:0 12px;}
-.theme-switch button{border:1px solid var(--line-strong);background:transparent;color:var(--ink-mid);font:inherit;font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;cursor:pointer;}
-.theme-switch button.is-on{background:var(--blue-1);border-color:var(--blue-1);color:var(--on-green);}
-@media (max-width:640px){.theme-switch{display:none;}}
-
-/* 히어로 라이트 전환 - 글자색 보정 */
-.hero .wrap{color:var(--ink-mid);}
-.hero .lede strong{color:var(--ink);}
-.hero .cta-micro{color:var(--ink-soft);}
-.hero .toprow .nb{color:inherit;}
-.hero .dday{color:var(--ink-mid);}
-
-/* ══ 최종 조정 ══ */
-/* 블루 확정 팔레트 */
-:root{
-  --blue-1:#0270FE; --blue-2:#1A7BFF; --blue-ink:#0A46A8;
-  --green-1:#2E86FF; --green-2:#9CC6FF; --on-green:#FFFFFF;
-  --page:#F2F5FA; --paper:#F2F5FA; --line:#E4E9F1; --line-strong:#C6D0E0;
-  --grad-blue-btn:linear-gradient(120deg,#2E86FF 0%,#0270FE 100%);
-  --grad-green:linear-gradient(120deg,#2E86FF 0%,#0270FE 100%);
-  --grad-blue:linear-gradient(157deg,#071A38 0%,#0B2551 40%,#0E2E63 72%,#08172F 100%);
-}
-.theme-switch{display:none !important;}
-
-/* 섹션 라벨 제거 후 흐름 정리 */
-.eyebrow{display:none !important;}
-.sec-head{margin-bottom:28px;}
-
-/* 그래프 애니메이션: 천천히 시작 */
-.stat-chart .col i{transition:height 1.9s cubic-bezier(.16,.9,.3,1) !important;}
-.stat-chart .col.on i{transition-delay:.25s !important;}
-.stat-chart .tip{transition:opacity .6s ease 1.5s, transform .6s ease 1.5s !important;}
-
-/* 로고 PNG가 민트라서 임시 색보정 — 블루 로고 파일 받으면 이 줄 삭제 */
-.wm-img{filter:none;}
-
-.stn{color:var(--blue-1);font-weight:800;}
-
-/* 로고 확대 */
-.wm-img{height:32px !important;width:auto !important;}
-@media (max-width:640px){.wm-img{height:25px !important;}}
-
-@media (max-width:640px){}
-
-/* 푸터 락업 로고 */
-.footer-lockup{
-  display:block;width:min(420px,78%);height:auto;margin:0 0 20px;
-}
-@media (max-width:640px){.footer-lockup{width:min(320px,90%);}}
 </style>
 
 
 <header>
   <div class="wrap navbar">
-    <a class="logo" href="#top"><img class="wm-img" src="data:image/webp;base64,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" alt="아모데이" width="880" height="152"></a>
-    <a class="btn btn-primary btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener" data-openchat>무료 강의 신청하기</a>
+    <a class="logo" href="#top"><span class="wm"><span class="wm-ai">AI</span>연습실</span></a>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false" aria-label="다크 모드 켜기" title="다크 모드 켜기">
+      <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4.2"/>
+        <g stroke-linecap="round">
+          <path d="M12 2.4v2.6M12 19v2.6M4.22 4.22l1.84 1.84M17.94 17.94l1.84 1.84M2.4 12h2.6M19 12h2.6M4.22 19.78l1.84-1.84M17.94 6.06l1.84-1.84"/>
+        </g>
+      </svg>
+      <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M20.2 14.2A8.4 8.4 0 1 1 9.8 3.8a6.6 6.6 0 0 0 10.4 10.4Z" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <a class="btn btn-primary btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat>무료 강의 신청하기</a>
   </div>
 </header>
-
-<div class="progress" id="progress" aria-hidden="true"></div>
 
 <main id="top">
 
   <!-- ===== HERO ===== -->
   <div class="hero">
     <div class="wrap">
+      <p class="hero-mark"><span class="wm"><span class="wm-ai">AI</span>연습실</span></p>
 
       <div class="toprow">
-        <span class="toptag">[<span class="nb">8월 29일(토)</span> <span class="nb">오후 3시</span> 무료 강의]</span>
+        <span class="toptag">[8월 30일 무료강의]</span>
         <span class="dday" id="dday" hidden></span>
       </div>
-      
+      <span class="eyebrow">일요일 오전 10시 · 서울 용산구 원효로 · 강의료 0원</span>
 
       <!-- 금지어 교체 완료(조사 기준: 02_최종세팅.md §B).
            "하루 만에"(시간압축) · "비법 대공개"(과장)를 제거했다. AI강의 피해가
            11건(2024)->42건(2025)로 늘며 오염된 어휘라 40~50대에겐 역효과다.
            대신 조사⑪ 결론을 따랐다 — 불안은 이미 최대치이므로 협박·과장이 아니라
            "용이성 + 따라잡을 수 있는 안전한 자리"가 빈 소구점. -->
-      <h1>혼자 하면 일 년,<br>같이 하면 하루,<br><span class="hl">AI 보는 눈, 키워 드립니다</span></h1>
+      <h1>AI, 한 번도 안 써봤어도<br><span class="hl">오늘 처음이면 됩니다</span><br>노트북만 들고 오세요</h1>
 
-      <p class="lede">늘 “해야지…” 하면서도 미뤄둔 그 AI 툴.<br>일상에선 도무지 시간이 안 나던 AI 공부, <strong>아모데이 무료강의</strong>에서 시작합니다.</p>
+      <p class="lede">
+        설치도, 코딩도, 영어도 없습니다. 화면을 같이 켜놓고 한 줄씩 따라 하면
+        연습실을 나설 때 <strong>세 가지가 이미 돌아가고 있습니다.</strong>
+      </p>
 
+      <div class="wins">
+        <span class="win">매번 같은 설명 반복 끝</span>
+        <span class="win">밀린 일 눈앞에서 정리</span>
+        <span class="win">잊는 일은 AI가 챙김</span>
+      </div>
 
       <div class="hero-cta">
-        <a class="btn btn-primary btn-lg" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener" data-openchat>선착순 무료 강의 신청하기</a>
+        <a class="btn btn-primary btn-lg" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat>선착순 무료 강의 신청하기</a>
         <a class="btn btn-ghost btn-lg" href="#wins">무엇을 배우나 먼저 보기</a>
       </div>
-      <p class="cta-micro"><span class="nb">서울 용산구</span> · <span class="nb">선착순 10명</span> · <span class="nb">보증금은 참석하시면 전액 환불</span></p>
+      <p class="cta-micro">신청 1분 · 강의료 0원 · 보증금은 참석하시면 전액 환불</p>
 
+      <div class="hero-meta">
+        <div><div class="meta-k">일시</div><div class="meta-v num">2026. 8. 30 (일) 오전 10:00<br><span class="sub"><span class="tbd">약 4시간 소요 예정</span></span></div></div>
+        <div><div class="meta-k">장소</div><div class="meta-v">서울 용산구 원효로<br><span class="sub">상세 주소는 신청자에게 안내</span></div></div>
+        <div><div class="meta-k">정원</div><div class="meta-v num">선착순 10명<br><span class="sub">마감되면 조기 종료</span></div></div>
+        <div><div class="meta-k">참가비</div><div class="meta-v"><span class="free">강의료 무료</span><br><span class="sub">보증금 20,000원 · 참석 시 환불</span></div></div>
+      </div>
+
+      <div class="trust">
+        <span class="trust-k">진행</span>
+        <span><strong>안훈민</strong> 식단 인증 AI ‘캐시세끼’ 대표 · KAIST MBA</span>
+        <span class="trust-dot"></span>
+        <span><strong>신세동</strong> AI활용지도사</span>
+      </div>
     </div>
   </div>
 
@@ -1158,35 +797,38 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="who">
     <div class="wrap">
       <div class="sec-head reveal">
-        
+        <span class="eyebrow">01 WHO</span>
         <h2>이런 분에게 꼭 필요한 강의입니다</h2>
       </div>
 
       <div class="wholist">
         <div class="whoitem reveal">
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10.5l4 4 9-9" stroke="#0270FE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10.5l4 4 9-9" stroke="#FF2D95" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <div>
-            <p class="t">GPT는 쓰지만, 채팅으로만 <span class="nb">쓰는 직장인</span></p>
+            <p class="t">GPT는 쓰지만, 채팅으로만 쓰는 직장인</p>
             <p class="s">질문하고 답 받는 데서 멈춰 있습니다. 일이 실제로 줄어드는 지점은 그다음부터인데, 거기까지 가본 적이 없습니다.</p>
           </div>
         </div>
         <div class="whoitem reveal">
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10.5l4 4 9-9" stroke="#0270FE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10.5l4 4 9-9" stroke="#FF2D95" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <div>
             <p class="t">혼자 다 해내야 하는 1인 사업가</p>
             <p class="s">사람을 더 쓸 수는 없고, 시간은 한정돼 있습니다. 반복되는 일부터 넘길 수 있으면 판이 달라집니다.</p>
           </div>
         </div>
         <div class="whoitem reveal">
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10.5l4 4 9-9" stroke="#0270FE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 10.5l4 4 9-9" stroke="#FF2D95" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <div>
-            <p class="t">“팀에 AI 도입해라”는 지시를 <span class="nb">받았는데 막막한 팀장</span></p>
+            <p class="t">“팀에 AI 도입해라”는 지시를 받았는데 막막한 팀장</p>
             <p class="s">위에서는 도입하라 하고, 아래에서는 뭘 하라는 건지 묻습니다. 먼저 본인이 한 번 끝까지 해봐야 팀에 시킬 수 있습니다.</p>
           </div>
         </div>
       </div>
 
-      <div class="stat-chart reveal" id="statChart"><p class="ch-title">AI를 써봤다 &nbsp;VS&nbsp; 업무에 제대로 쓴다</p><div class="ch"><div class="ch-grid"><i></i><i></i><i></i><i></i><i></i></div><div class="ch-bars"><div class="col"><b data-c="63.5">0%</b><i data-h="63.5"></i></div><div class="col on"><span class="tip">여기서 갈립니다</span><b data-c="17.1">0%</b><i data-h="17.1"></i></div></div></div><div class="ch-x"><span>AI를 써본<br>직장인</span><span class="on">업무에 제대로<br>쓰는 사람</span></div></div>
+      <div class="stat-row reveal">
+        <div class="stat-card"><b>63.5%</b><span>AI를 써본 직장인</span></div>
+        <div class="stat-card"><b>17.1%</b><span>업무에 제대로 쓰는 사람</span></div>
+      </div>
       <p class="stat-note reveal">직장인 열에 여섯이 AI를 써봤지만, 업무에 제대로 쓰는 사람은 열에 둘이 안 됩니다 <span class="cite">(한국은행, 2025)</span>. 그 사이 어딘가에 계시다면, 이 강의가 그 간격을 좁힙니다.</p>
 
       <p class="notfor reveal"><strong>이런 분은 오지 마세요.</strong> 이미 클로드코드를 쓰고 계신 분, 코딩을 배우러 오시는 분 — 이 강의가 아깝습니다. 완전 처음인 분 기준으로 갑니다.</p>
@@ -1197,16 +839,16 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="wins">
     <div class="wrap">
       <div class="sec-head reveal">
-        
-        <h2><span class="nb">하루의 끝,</span> <span class="nb">손에 쥐고 나가는 것들</span></h2>
-        <p>강의의 절반 이상이 실습입니다. 아래 3가지는 강의가 끝난 뒤에도 본인 계정과 컴퓨터에 그대로 남습니다.</p>
+        <span class="eyebrow">02 결과물</span>
+        <h2>듣고 끝나는 게 아니라, 세 개를 만들어서 나갑니다</h2>
+        <p>강의의 절반 이상이 실습입니다. 아래 세 가지는 강의가 끝난 뒤에도 본인 계정과 컴퓨터에 그대로 남습니다.</p>
       </div>
 
       <div class="actions">
         <div class="action reveal">
           <span class="action-tag">결과물 1</span>
           <div>
-            <h3>매번 같은 설명을 <span class="nb">반복하지 않게</span> 만들기</h3>
+            <h3>매번 같은 설명을 반복하지 않게 만들기</h3>
             <p class="desc">AI가 나를 처음 보는 사람처럼 대하는 게 초보자가 가장 빨리 지치는 지점입니다. 한 번의 세팅으로 이 반복을 없앱니다.</p>
           </div>
           <p class="takeaway"><strong>남는 것</strong>내 계정에 저장되는 세팅 1개</p>
@@ -1229,22 +871,22 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
         </div>
       </div>
 
-      <p class="demo-lead reveal">실제로 돌아가는 화면</p>
-      <div class="demo-wrap reveal">
-        <iframe id="demoFrame" src="https://ai-yeonseupsil.vercel.app/assets/agent-dashboard.html" loading="eager" allow="autoplay" width="1440" height="900"
-                title="AI가 작업하는 모습 데모"></iframe>
-        <a class="demo-open" href="https://ai-yeonseupsil.vercel.app/assets/agent-dashboard.html" target="_blank" rel="noopener"><span class="btn btn-primary btn-sm">▶ 데모 크게 보기</span></a>
-      </div>
-      <p class="demo-note reveal">AI가 명령을 받아 여러 작업을 동시에 처리하는 과정을 보여주는 데모입니다</p>
+      <p class="secret"><b>참고</b><span>구체적인 방법과 문장은 연습생에게만 현장에서 공개합니다. 자료로 먼저 배포하지 않습니다.</span></p>
 
       <div class="ctaband reveal">
         <div>
-          <p class="cb-t">3가지 다 만들고 나가는 데 <span class="nb">필요한 건</span> <span class="nb">노트북 하나</span>입니다</p>
-          <p class="cb-s"><span class="nb">강의료 0원</span> · <span class="nb">보증금은 참석 시 전액 환불</span></p>
+          <p class="cb-t">세 개 다 만들고 나가는 데 필요한 건 노트북 하나입니다</p>
+          <p class="cb-s">강의료 0원 · 보증금은 참석 시 전액 환불</p>
         </div>
-        <a class="btn btn-primary btn-lg" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener" data-openchat>선착순 무료 강의 신청하기</a>
+        <a class="btn btn-primary btn-lg" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat>선착순 무료 강의 신청하기</a>
       </div>
 
+      <div class="demo-wrap reveal">
+        <iframe src="assets/agent-dashboard.html" loading="lazy" width="1440" height="900"
+                title="AI가 작업하는 모습 데모"></iframe>
+        <a class="demo-open" href="assets/agent-dashboard.html" target="_blank" rel="noopener"><span class="btn btn-primary btn-sm">▶ 데모 크게 보기</span></a>
+      </div>
+      <p class="demo-note reveal">AI가 명령을 받아 여러 작업을 동시에 처리하는 과정을 보여주는 데모입니다 · 자동으로 반복됩니다</p>
     </div>
   </section>
 
@@ -1252,7 +894,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="compare">
     <div class="wrap">
       <div class="sec-head reveal">
-        
+        <span class="eyebrow">03 비교</span>
         <h2>유튜브로 혼자 익히는 것과 무엇이 다른가</h2>
         <p>정보는 이미 넘칩니다. 초보자가 막히는 건 정보가 없어서가 아니라, 내 화면에서 안 될 때 물어볼 데가 없어서입니다.</p>
       </div>
@@ -1260,14 +902,14 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
       <div class="tablewrap reveal">
         <table class="cmp">
           <thead>
-            <tr><th></th><th>혼자 검색·영상으로</th><th class="on">아모데이</th></tr>
+            <tr><th></th><th>혼자 검색·영상으로</th><th class="on">AI 연습실</th></tr>
           </thead>
           <tbody>
-            <tr><th>진도</th><td data-label="혼자 검색·영상으로">필요할 때마다 파편적으로</td><td class="on" data-label="아모데이">한 번에 끝까지, 순서대로</td></tr>
-            <tr><th>막혔을 때</th><td data-label="혼자 검색·영상으로">검색어를 모르니 검색이 안 됨</td><td class="on" data-label="아모데이">그 자리에서 화면 보고 해결</td></tr>
-            <tr><th>결과물</th><td data-label="혼자 검색·영상으로">“알겠다”에서 끝남</td><td class="on" data-label="아모데이">3가지를 실제로 만들어서 나감</td></tr>
-            <tr><th>다음 주</th><td data-label="혼자 검색·영상으로">대부분 안 쓰게 됨</td><td class="on" data-label="아모데이">내 계정에 남아 계속 쓰임</td></tr>
-            <tr><th>비용</th><td data-label="혼자 검색·영상으로">유료 결제부터 고민</td><td class="on" data-label="아모데이">무료로 어디까지 되는지 먼저 확인</td></tr>
+            <tr><th>진도</th><td>필요할 때마다 파편적으로</td><td class="on">한 번에 끝까지, 순서대로</td></tr>
+            <tr><th>막혔을 때</th><td>검색어를 모르니 검색이 안 됨</td><td class="on">그 자리에서 화면 보고 해결</td></tr>
+            <tr><th>결과물</th><td>“알겠다”에서 끝남</td><td class="on">세 개를 실제로 만들어서 나감</td></tr>
+            <tr><th>다음 주</th><td>대부분 안 쓰게 됨</td><td class="on">내 계정에 남아 계속 쓰임</td></tr>
+            <tr><th>비용</th><td>유료 결제부터 고민</td><td class="on">무료로 어디까지 되는지 먼저 확인</td></tr>
           </tbody>
         </table>
       </div>
@@ -1278,29 +920,38 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="host">
     <div class="wrap">
       <div class="sec-head reveal">
-        
+        <span class="eyebrow">04 진행</span>
         <h2>실무로 검증한 사람이 가르칩니다</h2>
       </div>
 
-      <div class="hostcard reveal"><span class="who-tag">강의</span>
-        <div class="hc-top">
+      <div class="speakers">
+        <div class="sp reveal">
           <div class="sp-photo">사진<br>자리</div>
-          <div>
-            <p class="sp-name">안훈민</p>
-            <p class="sp-role">AI 앱 서비스 CEO · <span class="nb">KAIST MBA 졸업</span></p>
-            <p class="sp-role2">식단 인증 AI ‘캐시세끼’ 대표</p>
-          </div>
+          <p class="sp-name">안훈민</p>
+          <p class="sp-role">식단 인증 AI 서비스 ‘캐시세끼’ 대표</p>
+          <ul class="sp-list">
+            <li>AI 서비스를 직접 만들어 운영 중인 창업자</li>
+            <li>KAIST MBA 졸업</li>
+            <li><span class="tbd">서비스 규모 숫자 한 줄 (사용자 수 등)</span></li>
+          </ul>
         </div>
-        <p class="hc-line"><span class="tbd">서비스 규모 한 줄 (예: 월 OO만 명이 쓰는 서비스) — 적어주시면 넣겠습니다.</span></p>
-        <p class="hc-quote"><span class="tbd">“한 줄 메시지를 적어주세요. 예: 코딩을 몰라도 하루 만에 AI를 업무에 적용할 수 있게 도와드립니다.”</span></p>
-      </div><div class="assist-grid reveal"><div class="assist"><div class="sp-photo">사진<br>자리</div><div><span class="who-tag ghost">보조 강사</span><p class="sp-name">신세동</p><p class="sp-role"><span class="tbd">한 줄 소개를 적어주시면 넣겠습니다.</span></p></div></div><div class="assist"><div class="sp-photo">사진<br>자리</div><div><span class="who-tag ghost">보조 강사</span><p class="sp-name">김지효</p><p class="sp-role"><span class="tbd">한 줄 소개를 적어주시면 넣겠습니다.</span></p></div></div></div>
+        <div class="sp reveal">
+          <div class="sp-photo">사진<br>자리</div>
+          <p class="sp-name">신세동</p>
+          <p class="sp-role">AI활용지도사</p>
+          <ul class="sp-list">
+            <li>AI활용지도사 자격 보유</li>
+            <li><span class="tbd">AI를 실제로 적용해본 사례 한 줄</span></li>
+          </ul>
+        </div>
+      </div>
 
       <div class="ctaband reveal">
         <div>
-          <p class="cb-t"><span class="nb">진행 1명 + 보조 강사 2명이</span> <span class="nb">자리를 돌며</span> <span class="nb">막힌 화면을 직접 봐드립니다</span></p>
+          <p class="cb-t">두 사람이 자리를 돌며 막힌 화면을 직접 봐드립니다</p>
           <p class="cb-s">정원이 정해져 있어 선착순으로 마감됩니다</p>
         </div>
-        <a class="btn btn-primary btn-lg" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener" data-openchat>선착순 무료 강의 신청하기</a>
+        <a class="btn btn-primary btn-lg" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat>선착순 무료 강의 신청하기</a>
       </div>
     </div>
   </section>
@@ -1309,21 +960,21 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="flow">
     <div class="wrap">
       <div class="sec-head reveal">
-        
-        <h2>당일, 이 순서로 진행합니다</h2>
-        <p>이야기 → 선택 → 실습 3가지 → 다음 단계. <span class="nb">순서대로 따라오면</span> 됩니다.</p>
+        <span class="eyebrow">05 커리큘럼</span>
+        <h2>강의 흐름 7단계</h2>
+        <p>이야기 → 선택 → 실습 세 개 → 다음 단계. 순서대로 따라오면 됩니다.</p>
       </div>
 
-      <span style="display:inline-block;margin-bottom:18px;font-size:14px;font-weight:700;color:var(--blue-ink)">총 소요 시간 2시간</span>
+      <span class="tbd" style="display:inline-block;margin-bottom:18px;font-size:14px;font-weight:700;color:var(--blue-ink)">총 소요 시간 약 4시간 (진행 상황에 따라 조정될 수 있음)</span>
 
       <div class="flow">
         <div class="step reveal"><span class="step-no num">01</span><h3>인사</h3><p>오늘 무엇을 만들어서 나가는지부터 보여드립니다.</p></div>
         <div class="step reveal"><span class="step-no num">02</span><h3>AI를 왜 써야 하는가</h3><p>도구 하나가 판을 바꾼 사례로 엽니다.</p></div>
-        <div class="step reveal"><span class="step-no num">03</span><h3>그중에 왜 클로드인가</h3><p>AI들의 성격 차이, <span class="nb">그리고 고르는 기준.</span></p></div>
-        <div class="step is-action reveal"><span class="step-no num">04</span><h3>실습 1</h3></div>
-        <div class="step is-action reveal"><span class="step-no num">05</span><h3>실습 2</h3></div>
-        <div class="step is-action reveal"><span class="step-no num">06</span><h3>실습 3</h3></div>
-        <div class="step reveal"><span class="step-no num">07</span><h3>결과 공유 · 질문 Q&amp;A</h3><p>만든 것을 서로 보여주고, 막혔던 것을 그 자리에서 답해드립니다.</p></div>
+        <div class="step reveal"><span class="step-no num">03</span><h3>그중에 왜 클로드인가</h3><p>AI들의 성격 차이, 그리고 고르는 기준.</p></div>
+        <div class="step is-action reveal"><span class="step-no num">04</span><h3><span class="step-mini">실습 1</span><br>첫 번째 결과물 만들기</h3><p>내용은 현장에서 공개합니다.</p></div>
+        <div class="step is-action reveal"><span class="step-no num">05</span><h3><span class="step-mini">실습 2</span><br>두 번째 결과물 만들기</h3><p>내용은 현장에서 공개합니다.</p></div>
+        <div class="step is-action reveal"><span class="step-no num">06</span><h3><span class="step-mini">실습 3</span><br>세 번째 결과물 만들기</h3><p>내용은 현장에서 공개합니다.</p></div>
+        <div class="step reveal"><span class="step-no num">07</span><h3>더 나아가고 싶다면</h3><p>무료로 어디까지 되는지, 유료 결제는 누구에게 의미가 있는지 솔직하게.</p></div>
       </div>
     </div>
   </section>
@@ -1332,19 +983,33 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="free">
     <div class="wrap">
       <div class="sec-head reveal">
-        
-        <h2>강의료는 없습니다. <span class="nb">보증금만 받습니다</span></h2>
+        <span class="eyebrow">06 강의료</span>
+        <h2>강의료는 없습니다. 보증금만 받습니다</h2>
+        <p>돈을 벌려고 여는 자리가 아닙니다. 다만 자리가 비는 일은 막아야 해서, 오시면 그대로 돌려드리는 보증금만 받습니다.</p>
       </div>
 
       <div class="ncards">
         <div class="ncard reveal">
-          <h3>보증금 10,000원</h3>
-          <p>신청만 해두고 안 오시면 <span class="nb">다른 분 자리가</span> 사라집니다. 참석하시면 <strong>전액 그대로 돌려드립니다.</strong></p>
+          <span class="no">01</span>
+          <h3>첫 강의라서</h3>
+          <p>처음 여는 자리입니다. 실제로 초보자가 어디에서 막히는지 저희도 봐야 합니다. 그 값을 강의료로 받지 않기로 했습니다.</p>
+        </div>
+        <div class="ncard reveal">
+          <span class="no">02</span>
+          <h3>후기가 필요해서</h3>
+          <p>다음 강의부터는 유료로 엽니다. 그때 보여줄 후기와 사례가 필요합니다. 끝나고 짧은 피드백 한 줄만 남겨주시면 됩니다.</p>
+        </div>
+        <div class="ncard reveal">
+          <span class="no">03</span>
+          <h3>보증금은 20,000원</h3>
+          <p>신청만 해두고 안 오시면 다른 분 자리가 사라집니다. 참석하시면 <strong>전액 그대로 돌려드립니다.</strong> 강의료로 쓰지 않습니다.</p>
         </div>
       </div>
 
       <ul class="honest reveal">
-        <li>신청서에 남기신 연락처는 이 강의 안내에만 씁니다. 광고는 보내지 않습니다.</li>
+        <li>첫 기수라 후기가 없습니다. 대신 커리큘럼을 위에 전부 공개했습니다.</li>
+        <li>수익 보장 같은 건 안 합니다. 다음 날 바로 쓰는 것만 가르칩니다.</li>
+        <li>오픈채팅방은 이 강의 안내에만 씁니다. 광고는 보내지 않습니다.</li>
       </ul>
 
       <div class="team-cta reveal">
@@ -1352,7 +1017,7 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
           <b>팀/회사 단위로 듣고 싶으신가요?</b>
           <p>인원·일정에 맞춘 진행이 가능합니다.</p>
         </div>
-        <a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener" data-openchat>단체 신청 문의</a>
+        <a class="btn btn-ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat>단체 신청 문의</a>
       </div>
     </div>
   </section>
@@ -1361,15 +1026,50 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="faq">
     <div class="wrap">
       <div class="sec-head reveal">
-        
+        <span class="eyebrow">07 자주 묻는 것</span>
         <h2>미리 답해두는 질문들</h2>
       </div>
       <div class="faq reveal">
-        <details><summary>보증금 1만원은 어떤 돈인가요?</summary><p>강의료는 0원입니다. 보증금은 자리를 지키기 위한 예약금이고, 참석하시면 당일 전액 돌려드립니다. 정원이 10명이라 한 자리가 비면 정말 오고 싶었던 분이 못 오시게 되어 최소한의 장치만 두었습니다.</p></details>
-        <details><summary>보증금은 언제 돌려받나요?</summary><p>강의가 끝나는 당일 바로 보내드립니다. 참석만 하시면 10,000원 전액 환불이고, 별도로 신청하실 것은 없습니다.</p></details>
-        <details><summary>컴퓨터를 잘 다루지 못해도 따라갈 수 있나요?</summary><p>따라오실 수 있습니다. 그날 입력하는 것은 한국어 문장뿐이고, 명령어나 단축키를 외울 일은 없습니다. 진행 1명과 보조 강사 2명이 자리를 돌기 때문에 막히면 그 자리에서 화면을 함께 봅니다.</p></details>
-        <details><summary>무엇을 준비해 가면 되나요?</summary><p>노트북과 휴대폰만 챙겨 오시면 됩니다. 계정 만들기는 시작 직후에 다 같이 진행하니 미리 하지 않으셔도 됩니다.</p></details>
-        <details><summary>장소는 어디인가요?</summary><p>서울 용산구 원효로 부근 오피스입니다. 6호선·경의중앙선 <b class="stn">효창공원앞역</b>과 1호선·경의중앙선 <b class="stn">용산역</b> 사이라 두 역 모두에서 가깝습니다. 정확한 건물과 층, 오시는 길은 신청해주신 분께 개별로 안내드립니다.</p></details>
+        <details>
+          <summary>무료라면서 보증금은 왜 받나요?</summary>
+          <p>강의료는 0원입니다. 보증금은 자리를 지키기 위한 장치입니다. 무료 모임은 신청만 해두고 오지 않는 경우가 많은데, 그러면 정말 오고 싶었던 분이 자리를 못 잡습니다. 참석하시면 전액 돌려드리므로 실제 부담은 0원입니다.</p>
+        </details>
+        <details>
+          <summary>보증금은 언제, 어떻게 돌려받나요?</summary>
+          <p>강의가 끝나는 당일에 돌려드립니다. 참석만 하시면 보증금 20,000원 전액 환불입니다.</p>
+        </details>
+        <details>
+          <summary>못 가게 되면 환불되나요?</summary>
+          <p><span class="tbd">불참·사전 취소 시 환불 기준을 적어주세요. 비어 있으면 분쟁이 생깁니다.</span></p>
+        </details>
+        <details>
+          <summary>컴퓨터를 잘 못 다뤄도 괜찮나요?</summary>
+          <p>괜찮습니다. 오늘 입력하는 건 한국어 문장뿐입니다. 명령어도 단축키 암기도 없고, 두 사람이 자리를 돌며 막힌 화면을 봐드립니다.</p>
+        </details>
+        <details>
+          <summary>강의 중에 결제하라고 하나요?</summary>
+          <p>아니요. 현장에서 파는 상품이 없습니다. 실습 세 가지도 전부 무료 계정으로 따라올 수 있습니다.</p>
+        </details>
+        <details>
+          <summary>AI를 이미 쓰고 있는데 들어도 되나요?</summary>
+          <p>됩니다. 다만 매일 업무에 쓰고 계시거나 자동화 도구를 다뤄보셨다면 쉽게 느껴질 수 있습니다. “깔아만 두고 방치 중”인 단계에 맞춰 설계했습니다.</p>
+        </details>
+        <details>
+          <summary>무엇을 준비해 가야 하나요?</summary>
+          <p>노트북과 휴대폰이면 됩니다. 계정 만들기는 시작 직후 같이 합니다. <span class="tbd">사전 준비가 더 필요하면 적어주세요.</span></p>
+        </details>
+        <details>
+          <summary>사전질문지에는 뭘 적나요?</summary>
+          <p>AI를 얼마나 써보셨는지, 어떤 일을 하시는지 정도입니다. 난이도와 실습 예시를 참석자에 맞춰 조정하려고 받습니다.</p>
+        </details>
+        <details>
+          <summary>혼자 가도 되나요?</summary>
+          <p>네, 대부분 혼자 오십니다. 실습은 각자 자기 컴퓨터로 진행하니 혼자 오셔도 전혀 문제없습니다.</p>
+        </details>
+        <details>
+          <summary>주차나 오시는 길은 어떻게 되나요?</summary>
+          <p><span class="tbd">장소 확정 후 주차·교통 안내를 이곳에 기재합니다.</span></p>
+        </details>
       </div>
     </div>
   </section>
@@ -1378,104 +1078,139 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
   <section id="apply" style="border-bottom:0">
     <div class="wrap">
       <div class="apply-box reveal">
-        
-        <h2>8월 29일 토요일 <span class="nb">오후 3시</span>, <span class="nb">10명 중 한 자리</span></h2>
-        <p><span class="nb">강의료 0원.</span> <span class="nb">보증금 10,000원은</span> <span class="nb">참석하시면 당일 전액 돌려드립니다.</span> <span class="nb">신청은 아래 버튼을 눌러</span> <span class="nb">1분이면 끝납니다.</span></p>
+        <span class="eyebrow">신청</span>
+        <h2>8월 30일 일요일 오전, 자리 하나 잡아두세요</h2>
+        <p>강의료는 없습니다. 신청은 아래 버튼 하나로 시작해 1분이면 끝납니다.</p>
 
         <div class="steps3">
-          <div class="s3"><span class="s3n">1</span><p>신청서 작성<br><span class="s3s">아래 버튼 한 번 · 1분</span></p></div>
-          <div class="s3"><span class="s3n">2</span><p>보증금 입금<br><span class="s3s">10,000원</span></p></div>
-          <div class="s3"><span class="s3n">3</span><p>참석 후 전액 환불<br><span class="s3s">당일 환불</span></p></div>
+          <div class="s3"><span class="s3n">1</span><p>오픈채팅방 입장<br><span class="s3s">아래 버튼 한 번</span></p></div>
+          <div class="s3"><span class="s3n">2</span><p>사전질문지 작성<br><span class="s3s">방 공지에 올려둡니다</span></p></div>
+          <div class="s3"><span class="s3n">3</span><p>보증금 입금<br><span class="s3s">20,000원</span></p></div>
+          <div class="s3"><span class="s3n">4</span><p>참석 후 전액 환불<br><span class="s3s">당일 환불</span></p></div>
         </div>
 
         <div class="hero-cta">
-          <a class="btn btn-primary btn-xl" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener" data-openchat>선착순 무료 강의 신청하기</a>
+          <a class="btn btn-primary btn-xl" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat>선착순 무료 강의 신청하기</a>
         </div>
-        <p class="cta-micro"><span class="nb">선착순 10명</span> · <span class="nb">마감되면 조기 종료됩니다</span></p>
+        <p class="cta-micro">선착순 10명 · 마감되면 조기 종료됩니다</p>
       </div>
     </div>
   </section>
 
   <div class="wrap">
-    <footer><img class="footer-lockup" src="data:image/webp;base64,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" alt="아모데이 · 아직 모르는 세상을 열어주는 클래스" width="1100" height="96">
-      <span><strong style="color:var(--ink);font-weight:700">아모데이</strong> · 하루 동안 영감을 선물하는 AI 원데이 프로그램</span>
+    <footer>
+      <span><strong style="color:var(--ink);font-weight:700">AI 연습실</strong> · AI를 처음 쓰는 사람을 위한 실습 클래스</span>
+      <span>문의 : <a href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat style="color:var(--blue-ink);font-weight:700">오픈채팅방</a></span>
     </footer>
   </div>
 </main>
 
 <div class="stickybar">
-  <div class="txt">8/29(토) 오후 3시<span>강의료 0원 · 선착순</span></div>
-  <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener" data-openchat>무료 강의 신청하기</a>
+  <div class="txt">8/30(일) 오전 10시<span>강의료 0원 · 선착순</span></div>
+  <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdzkY6JZZ1_Hhe5v8iOHN2iyG7j-8BMHZlVDA02ErnwOTLfTg/viewform" target="_blank" rel="noopener noreferrer" data-openchat>무료 강의 신청하기</a>
 </div>
 
 <script>
-  /* D-day */
+  /* 테마 토글.
+     - 저장값이 없으면 OS 설정을 따르고, 토글을 누른 순간부터 저장값이 이긴다.
+     - 저장값이 없는 동안에는 OS 테마 변경도 실시간으로 반영한다. */
   (function () {
-    var el = document.getElementById('dday'); if (!el) return;
-    var target = new Date('2026-08-29T15:00:00+09:00');
-    var days = Math.ceil((target - new Date()) / 86400000);
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    if (!btn) return;
+
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var meta = document.querySelector('meta[name="theme-color"]');
+
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    if (stored !== 'dark' && stored !== 'light') stored = null;
+
+    var isDark = function () {
+      return stored ? stored === 'dark' : mq.matches;
+    };
+
+    var sync = function () {
+      var dark = isDark();
+      var label = dark ? '라이트 모드 켜기' : '다크 모드 켜기';
+      btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      btn.setAttribute('aria-label', label);
+      btn.setAttribute('title', label);
+      /* 주소창 색도 같이 맞춘다. 안 하면 모바일에서 헤더 위쪽만 파랗게 뜬다. */
+      if (meta) meta.setAttribute('content', dark ? '#0A111F' : '#0B5BF0');
+      broadcast();
+    };
+
+    /* iframe(.demo-wrap)은 별도 문서라 부모 CSS가 안 먹는다. 선택값을 넘겨준다.
+       stored가 null이면 "OS 따라가라"는 뜻으로 그대로 전달한다. */
+    var broadcast = function () {
+      document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
+        try { f.contentWindow.postMessage({ type: 'theme', value: stored }, '*'); } catch (e) {}
+      });
+    };
+
+    btn.addEventListener('click', function () {
+      stored = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', stored);
+      try { localStorage.setItem('theme', stored); } catch (e) {}
+      sync();
+    });
+
+    var onSystemChange = function () { if (!stored) sync(); };
+    if (mq.addEventListener) mq.addEventListener('change', onSystemChange);
+    else if (mq.addListener) mq.addListener(onSystemChange);
+
+    /* 아직 로드 중인 iframe은 위 broadcast를 놓친다. 뜨는 대로 한 번 더 보낸다. */
+    document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
+      f.addEventListener('load', broadcast);
+    });
+
+    /* 데모 자동 재생 — 화면에 들어오면 시작하고 벗어나면 멈춘다.
+       iframe 은 자기가 보이는지 스스로 알 수 없어서 부모가 알려준다. */
+    (function () {
+      var wraps = document.querySelectorAll('.demo-wrap');
+      if (!wraps.length) return;
+      var tell = function (w, v) {
+        var f = w.querySelector('iframe');
+        if (!f || !f.contentWindow) return;
+        try { f.contentWindow.postMessage({ type: 'demo-visible', value: v }, '*'); } catch (e) {}
+      };
+      if (!('IntersectionObserver' in window)) {
+        wraps.forEach(function (w) { tell(w, true); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { tell(e.target, e.isIntersecting); });
+      }, { threshold: 0.25 });
+      wraps.forEach(function (w) {
+        io.observe(w);
+        /* 로드가 끝나야 postMessage 가 먹으므로, 뜨는 대로 현재 상태를 다시 알린다. */
+        var f = w.querySelector('iframe');
+        if (f) f.addEventListener('load', function () {
+          var r = w.getBoundingClientRect();
+          tell(w, r.top < innerHeight && r.bottom > 0);
+        });
+      });
+    })();
+
+    sync();
+  })();
+
+  (function () {
+    var target = new Date('2026-08-30T10:00:00+09:00');
+    var now = new Date();
+    var days = Math.ceil((target - now) / 86400000);
+    var el = document.getElementById('dday');
+    if (!el) return;
     if (days > 0) { el.textContent = 'D-' + days; el.hidden = false; }
     else if (days === 0) { el.textContent = '오늘 진행'; el.hidden = false; }
   })();
 
-  /* 스크롤 진행 표시줄 + 헤더 상태 */
   (function () {
-    var bar = document.getElementById('progress');
-    var head = document.querySelector('header');
-    var tick = false;
-    var draw = function () {
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      var y = window.scrollY || 0;
-      if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(y / max, 1) : 0) + ')';
-      if (head) head.classList.toggle('scrolled', y > 8);
-      tick = false;
-    };
-    window.addEventListener('scroll', function () {
-      if (!tick) { tick = true; requestAnimationFrame(draw); }
-    }, { passive: true });
-    window.addEventListener('resize', draw);
-    draw();
-  })();
-
-  /* 통계 숫자 카운트업 — 화면에 들어올 때 한 번만 */
-  (function () {
-    var els = document.querySelectorAll('.stat-card b');
-    if (!els.length || !('IntersectionObserver' in window)) return;
-    var run = function (el) {
-      var raw = el.textContent.trim();
-      var m = raw.match(/^([\d.]+)(.*)$/);
-      if (!m) return;
-      var end = parseFloat(m[1]), suffix = m[2];
-      var dec = (m[1].split('.')[1] || '').length;
-      var t0 = null, dur = 1100;
-      var step = function (t) {
-        if (t0 === null) t0 = t;
-        var p = Math.min((t - t0) / dur, 1);
-        var e = 1 - Math.pow(1 - p, 3);                 /* ease-out cubic */
-        el.textContent = (end * e).toFixed(dec) + suffix;
-        if (p < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    };
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (e.isIntersecting) { run(e.target); io.unobserve(e.target); }
-      });
-    }, { threshold: .6 });
-    els.forEach(function (el) { io.observe(el); });
-  })();
-
-  /* 스크롤 등장 — 같은 묶음 안의 카드는 순서대로 시차를 두고 뜬다 */
-  (function () {
-    document.querySelectorAll('.wins, .wholist, .actions, .flow, .ncards, .steps3, .faq').forEach(function (g) {
-      Array.prototype.forEach.call(g.children, function (c, i) {
-        c.classList.add('reveal', 'pop');
-        c.style.transitionDelay = Math.min(i * 100, 500) + 'ms';
-      });
-    });
     var els = document.querySelectorAll('.reveal');
     if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('in'); }); return;
+      els.forEach(function (el) { el.classList.add('in'); });
+      return;
     }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -1485,109 +1220,33 @@ html.gate-lock,html.gate-lock body{overflow:hidden!important;height:100%}
     els.forEach(function (el) { io.observe(el); });
   })();
 
-  /* 데모 iframe: 컨테이너 폭에 맞춰 축소 + 화면에 들어올 때만 재생 */
   (function () {
-    var fit = function () {
+    var fitDeck = function () {
       document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
         f.style.transform = 'scale(' + (f.parentElement.clientWidth / 960) + ')';
       });
     };
-    fit();
-    window.addEventListener('resize', fit);
-    if ('ResizeObserver' in window) {
-      var ro = new ResizeObserver(fit);
+    window.addEventListener('resize', fitDeck);
+    /* resize 만 듣고 있으면 창 크기가 아니라 컨테이너 폭만 바뀌는 경우
+       (폰트 로드 후 재배치, 스크롤바 등장, 확대/축소)에 스케일이 옛 값으로 남아
+       데모가 잘려 보인다. 컨테이너 자체를 관찰해 그때마다 다시 맞춘다. */
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(fitDeck);
       document.querySelectorAll('.demo-wrap').forEach(function (w) { ro.observe(w); });
     }
-    /* 데모에 "지금 화면에 보인다"를 알린다.
-       한 번만 보내면 iframe 로드 전에 도착해 유실될 수 있어,
-       로드 직후 + 보이는 동안 5초마다 다시 보내 재생이 끊기지 않게 한다. */
-    var visible = false;
-    var ping = function () {
-      document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
-        try { f.contentWindow.postMessage({ type: 'demo-visible', value: visible }, '*'); } catch (err) {}
-      });
-    };
-    document.querySelectorAll('.demo-wrap iframe').forEach(function (f) {
-      f.addEventListener('load', ping);
-    });
-    if ('IntersectionObserver' in window) {
-      var vo = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { visible = e.isIntersecting; ping(); });
-      }, { threshold: .2 });
-      document.querySelectorAll('.demo-wrap').forEach(function (w) { vo.observe(w); });
-    } else { visible = true; ping(); }
-    setInterval(function () { if (visible) ping(); }, 5000);
-  })();
-</script>
+    window.addEventListener('load', fitDeck);
+    fitDeck();
 
-<script>
-  /* FAQ 아코디언 — 항상 하나만 열려 있게 한다.
-     details의 toggle 이벤트는 버블링되지 않아 각 요소에 직접 건다. */
-  (function () {
-    var items = document.querySelectorAll('.faq details');
-    items.forEach(function (d) {
-      d.addEventListener('toggle', function () {
-        if (!d.open) return;
-        items.forEach(function (o) { if (o !== d) o.open = false; });
+    // 모바일 카드형 비교표: 열 제목을 각 셀의 라벨로 복사
+    var cmpHeads = document.querySelectorAll('.cmp thead th');
+    document.querySelectorAll('.cmp tbody tr').forEach(function (tr) {
+      tr.querySelectorAll('td').forEach(function (td, i) {
+        var h = cmpHeads[i + 1];
+        if (h) td.setAttribute('data-label', h.textContent.trim());
       });
     });
   })();
 </script>
 
-
-<script>
-(function () {
-  var chart = document.getElementById("statChart");
-  if (!chart) return;
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var bars = [].slice.call(chart.querySelectorAll(".col i"));
-  var max = Math.max.apply(null, bars.map(function (b) { return parseFloat(b.dataset.h); }));
-  function run() {
-    chart.classList.add("go");
-    bars.forEach(function (b) { b.style.height = (parseFloat(b.dataset.h) / max * 100) + "%"; });
-    chart.querySelectorAll(".col b").forEach(function (el) {
-      var t = parseFloat(el.dataset.c);
-      if (reduce) { el.textContent = t.toFixed(1) + "%"; return; }
-      var s = null;
-      function step(ts) {
-        if (!s) s = ts;
-        var p = Math.min((ts - s) / 1900, 1);
-        el.textContent = (t * (1 - Math.pow(1 - p, 3))).toFixed(1) + "%";
-        if (p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    });
-  }
-  function reset() {
-    chart.classList.remove("go");
-    bars.forEach(function (b) { b.style.height = "0%"; });
-    chart.querySelectorAll(".col b").forEach(function (e) { e.textContent = "0%"; });
-    requestAnimationFrame(run);
-  }
-  if (!("IntersectionObserver" in window)) { run(); }
-  else {
-    var io = new IntersectionObserver(function (en) {
-      en.forEach(function (e) { if (e.isIntersecting) { run(); io.disconnect(); } });
-    }, { threshold: 0.25 });
-    io.observe(chart);
-  }
-  /* removed */ if (false)
-  var host = document.querySelector("header .wrap, .site-header .wrap, header");
-  if (host) {
-    var box = document.createElement("div");
-    box.className = "theme-switch";
-    box.innerHTML = '<button type="button" data-t="mint" class="is-on">민트</button><button type="button" data-t="blue">블루</button>';
-    var cta = host.querySelector("a.btn");
-    if (cta && cta.parentNode) cta.parentNode.insertBefore(box, cta); else host.appendChild(box);
-    box.addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
-      box.querySelectorAll("button").forEach(function (x) { x.classList.remove("is-on"); });
-      b.classList.add("is-on");
-      document.body.classList.toggle("theme-blue", b.dataset.t === "blue");
-      reset();
-    });
-  }
-})();
-</script>
 </body>
 </html>
