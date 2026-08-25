@@ -5,3 +5,4 @@
 tests/
 index.html.backup-*
 *.md
+.env*
